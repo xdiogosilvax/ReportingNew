@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Consolidated_ReportingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Consolidated_Reporting.dbo.Rep_ReportCategories' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Rep_ReportCategories">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="FamilyID" />
+            <PropertyRef Name="Category" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="FamilyID" Type="int" Nullable="false" />
+          <Property Name="Category" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CategoryType" Type="int" />
+          <Property Name="Tabid" Type="int" />
+        </EntityType>
+        <EntityType Name="Rep_ReportFamilies">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Family" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="TabID" Type="int" />
+        </EntityType>
+        <EntityType Name="Rep_ReportNames">
+          <Key>
+            <PropertyRef Name="ReportID" />
+          </Key>
+          <Property Name="ReportID" Type="int" Nullable="false" />
+          <Property Name="CategoryID" Type="int" />
+          <Property Name="ReportName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReportDescription" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReportOrXL" Type="int" />
+        </EntityType>
+        <Function Name="Rep_ReportListforUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="Report">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="FamilyId" Type="int" Mode="In" />
+          <Parameter Name="CategoryID" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="Consolidated_ReportingModelStoreContainer">
+          <EntitySet Name="Rep_ReportFamilies" EntityType="Self.Rep_ReportFamilies" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rep_ReportNames" EntityType="Self.Rep_ReportNames" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rep_ReportCategories" EntityType="Self.Rep_ReportCategories" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[Rep_ReportCategories].[Id] AS [Id], 
+[Rep_ReportCategories].[FamilyID] AS [FamilyID], 
+[Rep_ReportCategories].[Category] AS [Category], 
+[Rep_ReportCategories].[CategoryType] AS [CategoryType], 
+[Rep_ReportCategories].[Tabid] AS [Tabid]
+FROM [dbo].[Rep_ReportCategories] AS [Rep_ReportCategories]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Consolidated_ReportingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Rep_ReportFamilies">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Family" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TabID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Rep_ReportNames">
+          <Key>
+            <PropertyRef Name="ReportID" />
+          </Key>
+          <Property Name="ReportID" Type="Int32" Nullable="false" />
+          <Property Name="CategoryID" Type="Int32" />
+          <Property Name="ReportName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReportDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReportOrXL" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Rep_ReportCategories">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="FamilyID" />
+            <PropertyRef Name="Category" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="FamilyID" Type="Int32" Nullable="false" />
+          <Property Name="Category" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CategoryType" Type="Int32" />
+          <Property Name="Tabid" Type="Int32" />
+        </EntityType>
+        <EntityContainer Name="Consolidated_ReportingEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Rep_ReportFamilies" EntityType="Self.Rep_ReportFamilies" />
+          <EntitySet Name="Rep_ReportNames" EntityType="Self.Rep_ReportNames" />
+          <EntitySet Name="Rep_ReportCategories" EntityType="Self.Rep_ReportCategories" />
+          <FunctionImport Name="Rep_ReportListforUser" ReturnType="Collection(Consolidated_ReportingModel.Rep_ReportListforUser_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="FamilyId" Mode="In" Type="Int32" />
+            <Parameter Name="CategoryID" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="Rep_ReportListforUser_Result">
+          <Property Type="Int32" Name="FamilyID" Nullable="false" />
+          <Property Type="String" Name="FamilyName" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="Allowed" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Consolidated_ReportingModelStoreContainer" CdmEntityContainer="Consolidated_ReportingEntities">
+          <EntitySetMapping Name="Rep_ReportFamilies">
+            <EntityTypeMapping TypeName="Consolidated_ReportingModel.Rep_ReportFamilies">
+              <MappingFragment StoreEntitySet="Rep_ReportFamilies">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Family" ColumnName="Family" />
+                <ScalarProperty Name="TabID" ColumnName="TabID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rep_ReportNames">
+            <EntityTypeMapping TypeName="Consolidated_ReportingModel.Rep_ReportNames">
+              <MappingFragment StoreEntitySet="Rep_ReportNames">
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="ReportName" ColumnName="ReportName" />
+                <ScalarProperty Name="ReportDescription" ColumnName="ReportDescription" />
+                <ScalarProperty Name="ReportOrXL" ColumnName="ReportOrXL" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rep_ReportCategories">
+            <EntityTypeMapping TypeName="Consolidated_ReportingModel.Rep_ReportCategories">
+              <MappingFragment StoreEntitySet="Rep_ReportCategories">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FamilyID" ColumnName="FamilyID" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="CategoryType" ColumnName="CategoryType" />
+                <ScalarProperty Name="Tabid" ColumnName="Tabid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Rep_ReportListforUser" FunctionName="Consolidated_ReportingModel.Store.Rep_ReportListforUser">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Consolidated_ReportingModel.Rep_ReportListforUser_Result">
+                <ScalarProperty Name="FamilyID" ColumnName="FamilyID" />
+                <ScalarProperty Name="FamilyName" ColumnName="FamilyName" />
+                <ScalarProperty Name="Allowed" ColumnName="Allowed" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

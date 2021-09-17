@@ -2,30 +2,210 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+
+
+    <style>
+        /* The sidebar menu */
+        .sidebar {
+            height: 100%; /* 100% Full-height */
+            width: 0; /* 0 width - change this with JavaScript */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Stay on top */
+            top: 0;
+            left: 0;
+            background-color: #191818; /* Black*/
+            overflow-x: hidden; /* Disable horizontal scroll */
+            padding-top: 60px; /* Place content 60px from the top */
+            transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
+        }
+
+            /* The sidebar links */
+            .sidebar a {
+                padding: 8px 8px 8px 32px;
+                text-decoration: none;
+                font-size: 25px;
+                color: #818181;
+                display: block;
+                transition: 0.3s;
+            }
+
+                /* When you mouse over the navigation links, change their color */
+                .sidebar a:hover {
+                    color: #f1f1f1;
+                }
+
+            /* Position and style the close button (top right corner) */
+            .sidebar .closebtn {
+                position: absolute;
+                top: 0;
+                right: 25px;
+                font-size: 36px;
+                margin-left: 50px;
+            }
+
+        /* The button used to open the sidebar */
+        .openbtn {
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #111;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+        }
+
+            .openbtn:hover {
+                background-color: #444;
+            }
+
+        /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+        #main {
+            transition: margin-left .5s; /* If you want a transition effect */
+            padding: 20px;
+        }
+        .nested {
+            display:none;
+        }
+    </style>
+
+
+    <div class="navbar navbar-inverse navbar-fixed-top ">
+        <div class="container">
+            <div class="navbar-header left>
+
+                <img class="" src="../img/QuadLogoWhite.png" class="img-responsive" width="30%">
+            </div>
+        </div>
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+
+
+    <div id="mySidebar" class="sidebar navbar-static-top">
+        
+        <a href="#"></a>
+        @foreach (Rep_ReportListforUser_Result family in Model)
+        {
+            <li>
+                <a href="#" class="">@family.FamilyName </a>
+                <ul class="nested">
+                    <a href="#" class="">@family.FamilyID </a>
+                    <ul class="nested">
+                        <a href="#" class="">@family.Allowed </a>
+                    </ul>
+                </ul>
+            </li>
+        }
+
     </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+
+    <div id="main">
+        <span id="one" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>
+        <span id="two" style="font-size:30px;cursor:pointer" onclick="closeNav() ">&#9776; </span>
     </div>
-</div>
+
+
+
+
+    <div class="containert">
+
+        <form class="container ">
+            <div class="form-group">
+                <label for="exampleFormControlSelect2">Site ID</label>
+                <select multiple class="form-control" id="exampleFormControlSelect2">
+                    <option>Site 1</option>
+                    <option>Site 2</option>
+                    <option>Site 3</option>
+                    <option>Site 4</option>
+                    <option>Site 5</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1">Date From</label>
+                <input type="date" class="form-control" id"dateFrom">
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1">Date To</label>
+                <input type="date" class="form-control" id"dateTo">
+            </div>
+            <div class="row">
+                <button type="button" class="btn btn-success">Take me to the report</button>
+                <button type="button" class="btn btn-danger">Clear</button>
+            </div>
+
+        </form>
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Quadranet</p>
+        </footer>
+    </div>
+
+    <script>
+
+
+        var o = document.getElementById("one");
+        var to = document.getElementById("two");
+        to.style.display = 'none';
+
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+            o.style.display = 'none';
+            to.style.display = '';
+        }
+
+        function closeNav() {
+
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+            o.style.display = '';
+            to.style.display = 'none';
+
+        }
+
+
+        /*
+        var toggler = document.getElementsByClassName("caret");
+        var i;
+
+        for (i = 0; i < toggler.length; i++) {
+            toggler[i].addEventListener("click", function () {
+                this.parentElement.querySelector(".nested").classList.toggle("active");
+               
+            });
+        }
+
+*/
+    </script>
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
