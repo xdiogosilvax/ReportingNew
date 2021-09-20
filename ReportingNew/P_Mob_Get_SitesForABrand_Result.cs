@@ -10,12 +10,10 @@
 namespace ReportingNew
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Rep_ReportFamilies
+    public partial class P_Mob_Get_SitesForABrand_Result
     {
-        public int ID { get; set; }
-        public string Family { get; set; }
-        public Nullable<int> TabID { get; set; }
+        public Nullable<int> ID { get; set; }
+        public string Text { get; set; }
     }
 }

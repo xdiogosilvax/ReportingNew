@@ -10,14 +10,11 @@
 namespace ReportingNew
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Rep_ReportNames
+    public partial class P_Mob_Get_ReportCategories_Result
     {
-        public int ReportID { get; set; }
         public Nullable<int> CategoryID { get; set; }
-        public string ReportName { get; set; }
-        public string ReportDescription { get; set; }
-        public Nullable<int> ReportOrXL { get; set; }
+        public string Category { get; set; }
+        public int Allowed { get; set; }
     }
 }

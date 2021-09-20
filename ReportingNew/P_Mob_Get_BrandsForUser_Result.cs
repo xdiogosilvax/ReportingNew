@@ -11,10 +11,9 @@ namespace ReportingNew
 {
     using System;
     
-    public partial class Rep_ReportListforUser_Result
+    public partial class P_Mob_Get_BrandsForUser_Result
     {
-        public int FamilyID { get; set; }
-        public string FamilyName { get; set; }
-        public int Allowed { get; set; }
+        public int ID { get; set; }
+        public string Text { get; set; }
     }
 }

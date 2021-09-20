@@ -2,6 +2,7 @@
     ViewBag.Title = "Home Page";
 }
 
+@using ReportingNew.Models;
 
 <!DOCTYPE html>
 <html>
@@ -11,6 +12,8 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
+
 </head>
 <body>
 
@@ -73,33 +76,39 @@
             transition: margin-left .5s; /* If you want a transition effect */
             padding: 20px;
         }
+
         .nested {
-            display:none;
+            display: none;
+        }
+
+        .center {
+            margin: auto;
+            width: 50%;
+            padding: 10px;
         }
     </style>
 
 
     <div class="navbar navbar-inverse navbar-fixed-top ">
         <div class="container">
-            <div class="navbar-header left>
+            <div class="navbar-header left">
+                <img src="../img/QuadLogoWhite.png" class="img-responsive" width=30%>
 
-                <img class="" src="../img/QuadLogoWhite.png" class="img-responsive" width="30%">
             </div>
         </div>
-    </div>
-
+    </div> 
 
     <div id="mySidebar" class="sidebar navbar-static-top">
-        
+        @model SPMenuModel
         <a href="#"></a>
-        @foreach (Rep_ReportListforUser_Result family in Model)
+        @foreach (var family in Model.namesReport)
         {
             <li>
-                <a href="#" class="">@family.FamilyName </a>
+                <a href="#" class=""><span class="caret">@family.ReportName</span></a>
                 <ul class="nested">
-                    <a href="#" class="">@family.FamilyID </a>
+                    <a href="#" class=""> </a>
                     <ul class="nested">
-                        <a href="#" class="">@family.Allowed </a>
+                        <a href="#" class=""> </a>
                     </ul>
                 </ul>
             </li>
@@ -115,19 +124,26 @@
 
 
 
-    <div class="containert">
+    <div class="container center">
 
-        <form class="container ">
+        <form class="">
             <div class="form-group">
-                <label for="exampleFormControlSelect2">Site ID</label>
-                <select multiple class="form-control" id="exampleFormControlSelect2">
-                    <option>Site 1</option>
-                    <option>Site 2</option>
-                    <option>Site 3</option>
-                    <option>Site 4</option>
-                    <option>Site 5</option>
-                </select>
+                <!-- Example single danger button -->
+                <div class="btn-group">
+                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Action
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Separated link</a>
+                    </div>
+                </div>
             </div>
+
+
             <div class="form-group">
                 <label for="exampleFormControlTextarea1">Date From</label>
                 <input type="date" class="form-control" id"dateFrom">
@@ -143,7 +159,7 @@
 
         </form>
         <hr />
-        <footer>
+        <footer class="center">
             <p>&copy; @DateTime.Now.Year - Quadranet</p>
         </footer>
     </div>
@@ -179,7 +195,7 @@
         for (i = 0; i < toggler.length; i++) {
             toggler[i].addEventListener("click", function () {
                 this.parentElement.querySelector(".nested").classList.toggle("active");
-               
+
             });
         }
 
@@ -189,6 +205,8 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+ 
+    
 </body>
 </html>
 

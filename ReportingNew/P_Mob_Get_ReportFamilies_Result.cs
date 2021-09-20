@@ -10,14 +10,10 @@
 namespace ReportingNew
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Rep_ReportCategories
+    public partial class P_Mob_Get_ReportFamilies_Result
     {
-        public int Id { get; set; }
-        public int FamilyID { get; set; }
-        public string Category { get; set; }
-        public Nullable<int> CategoryType { get; set; }
-        public Nullable<int> Tabid { get; set; }
+        public Nullable<int> FamilyID { get; set; }
+        public string FamilyName { get; set; }
     }
 }
