@@ -11,6 +11,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
+
+
     @Scripts.Render("~/bundles/modernizr")
 
 
@@ -34,7 +36,7 @@
         }
 
             /* The sidebar links */
-            .sidebar a {
+            .menu_fam {
                 padding: 8px 8px 8px 32px;
                 text-decoration: none;
                 font-size: 25px;
@@ -42,11 +44,32 @@
                 display: block;
                 transition: 0.3s;
             }
+                      /* The sidebar links */
+            .menu_cat {
+                padding: 8px 8px 8px 32px;
+                text-decoration: none;
+                font-size: 20px;
+                color: #818181;
+                display: block;
+                transition: 0.3s;
+            }
+                      /* The sidebar links */
+            .menu_name {
+                padding: 8px 8px 8px 32px;
+                text-decoration: none;
+                font-size: 15px;
+                color: #818181;
+                display: block;
+                transition: 0.3s;
+            }
+            
 
-                /* When you mouse over the navigation links, change their color */
-                .sidebar a:hover {
-                    color: #f1f1f1;
-                }
+
+
+            /* When you mouse over the navigation links, change their color */
+            .sidebar a:hover {
+                color: #f1f1f1;
+            }
 
             /* Position and style the close button (top right corner) */
             .sidebar .closebtn {
@@ -86,6 +109,9 @@
             width: 50%;
             padding: 10px;
         }
+        .dropdown_size {
+            min-width: 250px;
+        }
     </style>
 
 
@@ -96,30 +122,30 @@
 
             </div>
         </div>
-    </div> 
+    </div>
 
     <div id="mySidebar" class="sidebar navbar-static-top">
         @model SPMenuModel
         <a href="#"></a>
         @foreach (var family in Model.familiesReport)
         {
-            <li>
-                <a href="#" class="">@family.FamilyName</a>
+            <ul>
+                <a href="#" class="menu_fam">@family.FamilyName</a>
                 <ul class="">
-                    @foreach (var cat in Model.CategoriesReport) 
+                    @foreach (var cat in Model.CategoriesReport)
                     {
-                    <a href="#" class=""> @cat.Category</a>
-                    }
-                    
-                <ul class="">
-                    @foreach (var name in Model.namesReport)
-                    {
-                        <a href="#" class=""> @name.ReportName</a>
+                        <li href="#" class=""><a class="menu_cat"> @cat.Category</a></li>
                     }
 
+                    <ul class="">
+                        @foreach (var name in Model.namesReport)
+                        {
+                            <li href="#" class=""><a class="menu_name"> @name.ReportName</a></li>
+                        }
+
+                    </ul>
                 </ul>
-                </ul>
-            </li>
+            </ul>
         }
 
     </div>
@@ -137,21 +163,38 @@
         <form class="">
             <div class="form-group">
                 <!-- Example single danger button -->
-                <div class="btn-group">
-                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Action
+                <div class="dropdown">
+                    <button class="btn dropdown_size dropdown-toggle" type="button" data-toggle="dropdown">
+                        Select Brand
+                        <span class="caret"></span>
                     </button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Separated link</a>
-                    </div>
+                    <ul class="dropdown-menu">
+                        @foreach (var brand in Model.Brands_User)
+                        {
+                            <li><a href="#">@brand.Text</a></li>
+                        }
+
+                    </ul>
                 </div>
             </div>
 
+              <div class="form-group">
+                <!-- Example single danger button -->
+                <div class="dropdown">
+                    <button class="btn dropdown_size dropdown-toggle" type="button" data-toggle="dropdown">
+                        Select Site
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                       
+                        
+                            <li><a href="#">site.Text</a></li>
+                        
+                    </ul>
+                </div>
+            </div>
 
+            <!--  -->
             <div class="form-group">
                 <label for="exampleFormControlTextarea1">Date From</label>
                 <input type="date" class="form-control" id"dateFrom">
@@ -161,7 +204,9 @@
                 <input type="date" class="form-control" id"dateTo">
             </div>
             <div class="row">
-                <button type="button" class="btn btn-success">Take me to the report</button>
+
+                <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("urlMVP","Home")'">Take me to the report</button>
+
                 <button type="button" class="btn btn-danger">Clear</button>
             </div>
 
@@ -180,8 +225,8 @@
         to.style.display = 'none';
 
         function openNav() {
-            document.getElementById("mySidebar").style.width = "550px";
-            document.getElementById("main").style.marginLeft = "550px";
+            document.getElementById("mySidebar").style.width = "400px";
+            document.getElementById("main").style.marginLeft = "400px";
             o.style.display = 'none';
             to.style.display = '';
         }
@@ -210,11 +255,12 @@
 */
     </script>
 
+    <script src="Scripts/jquery-2.1.1.js"></script>
+    <script src="Scripts/bootstrap.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
- 
-    
+
+
 </body>
 </html>
 
