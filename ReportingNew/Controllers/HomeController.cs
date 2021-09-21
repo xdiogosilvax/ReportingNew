@@ -26,7 +26,7 @@ namespace ReportingNew.Controllers
             //model.Brands_User = context.P_Mob_Get_BrandsForUser.ToList();
             model.familiesReport= context.P_Mob_Get_ReportFamilies("John");
             model.CategoriesReport = context.P_Mob_Get_ReportCategories("John", 1);
-            model.namesReport = context.P_Mob_Get_ReportNames("John", 1,1);
+            model.namesReport = context.P_Mob_Get_ReportNames("John", 1,2);
 
             return View(model);
 
