@@ -135,19 +135,23 @@
                     @foreach (var cat in Model.CategoriesReport)
                     {
                         <li href="#" class=""><a class="menu_cat"> @cat.Category</a></li>
-                    }
 
+                    
                     <ul class="">
                         @foreach (var name in Model.namesReport)
                         {
-                            <li href="#" class=""><a class="menu_name"> @name.ReportName</a></li>
+                            <li href="#" class=""><a href="home/urlMVP"  class="menu_name"> @name.ReportName</a></li>
                         }
 
                     </ul>
+                    }
                 </ul>
+                   
             </ul>
         }
+        
 
+        
     </div>
 
     <div id="main">
@@ -156,62 +160,49 @@
     </div>
 
 
-
-
     <div class="container center">
 
-        <form class="">
+        <form method="POST" action="Home/urlMVP">
             <div class="form-group">
                 <!-- Example single danger button -->
-                <div class="dropdown">
-                    <button class="btn dropdown_size dropdown-toggle" type="button" data-toggle="dropdown">
-                        Select Brand
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        @foreach (var brand in Model.Brands_User)
-                        {
-                            <li><a href="#">@brand.Text</a></li>
-                        }
+                <label>Site</label>
+                <select class="form-control" name="siteN">
 
-                    </ul>
-                </div>
+                    @foreach (var site in Model.sitesRep)
+                    {
+                        <option>@site.SiteName</option>
+                    }
+
+
+                </select>
+
+
             </div>
 
-              <div class="form-group">
-                <!-- Example single danger button -->
-                <div class="dropdown">
-                    <button class="btn dropdown_size dropdown-toggle" type="button" data-toggle="dropdown">
-                        Select Site
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                       
-                        
-                            <li><a href="#">site.Text</a></li>
-                        
-                    </ul>
-                </div>
-            </div>
 
             <!--  -->
             <div class="form-group">
                 <label for="exampleFormControlTextarea1">Date From</label>
-                <input type="date" class="form-control" id"dateFrom">
+                <input type="date" class="form-control" name="dateFrom">
             </div>
             <div class="form-group">
                 <label for="exampleFormControlTextarea1">Date To</label>
-                <input type="date" class="form-control" id"dateTo">
+                <input type="date" class="form-control" name="dateTo">
             </div>
+
             <div class="row">
 
-                <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("urlMVP","Home")'">Take me to the report</button>
+                <button type="submit" class="btn btn-success">Take me to the report</button>
 
                 <button type="button" class="btn btn-danger">Clear</button>
             </div>
 
         </form>
-        <hr />
+        <hr/>
+
+
+
+
         <footer class="center">
             <p>&copy; @DateTime.Now.Year - Quadranet</p>
         </footer>
@@ -241,18 +232,8 @@
         }
 
 
-        /*
-        var toggler = document.getElementsByClassName("caret");
-        var i;
+    
 
-        for (i = 0; i < toggler.length; i++) {
-            toggler[i].addEventListener("click", function () {
-                this.parentElement.querySelector(".nested").classList.toggle("active");
-
-            });
-        }
-
-*/
     </script>
 
     <script src="Scripts/jquery-2.1.1.js"></script>

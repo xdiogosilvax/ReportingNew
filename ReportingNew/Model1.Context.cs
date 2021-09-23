@@ -56,33 +56,33 @@ namespace ReportingNew
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<P_Mob_Get_BrandsForUser_Result>("P_Mob_Get_BrandsForUser", usernameParameter);
         }
     
-        public virtual ObjectResult<P_Mob_Get_ReportCategories_Result> P_Mob_Get_ReportCategories(string username, Nullable<int> familyid)
+        public virtual ObjectResult<P_Mob_Get_ReportCategories_Result> P_Mob_Get_ReportCategories(Nullable<System.Guid> userGUID, Nullable<int> familyid)
         {
-            var usernameParameter = username != null ?
-                new ObjectParameter("username", username) :
-                new ObjectParameter("username", typeof(string));
+            var userGUIDParameter = userGUID.HasValue ?
+                new ObjectParameter("UserGUID", userGUID) :
+                new ObjectParameter("UserGUID", typeof(System.Guid));
     
             var familyidParameter = familyid.HasValue ?
                 new ObjectParameter("Familyid", familyid) :
                 new ObjectParameter("Familyid", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<P_Mob_Get_ReportCategories_Result>("P_Mob_Get_ReportCategories", usernameParameter, familyidParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<P_Mob_Get_ReportCategories_Result>("P_Mob_Get_ReportCategories", userGUIDParameter, familyidParameter);
         }
     
-        public virtual ObjectResult<P_Mob_Get_ReportFamilies_Result> P_Mob_Get_ReportFamilies(string username)
+        public virtual ObjectResult<P_Mob_Get_ReportFamilies_Result> P_Mob_Get_ReportFamilies(Nullable<System.Guid> userGUID)
         {
-            var usernameParameter = username != null ?
-                new ObjectParameter("username", username) :
-                new ObjectParameter("username", typeof(string));
+            var userGUIDParameter = userGUID.HasValue ?
+                new ObjectParameter("UserGUID", userGUID) :
+                new ObjectParameter("UserGUID", typeof(System.Guid));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<P_Mob_Get_ReportFamilies_Result>("P_Mob_Get_ReportFamilies", usernameParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<P_Mob_Get_ReportFamilies_Result>("P_Mob_Get_ReportFamilies", userGUIDParameter);
         }
     
-        public virtual ObjectResult<P_Mob_Get_ReportNames_Result> P_Mob_Get_ReportNames(string username, Nullable<int> familyid, Nullable<int> categoryID)
+        public virtual ObjectResult<P_Mob_Get_ReportNames_Result> P_Mob_Get_ReportNames(Nullable<System.Guid> userGUID, Nullable<int> familyid, Nullable<int> categoryID)
         {
-            var usernameParameter = username != null ?
-                new ObjectParameter("username", username) :
-                new ObjectParameter("username", typeof(string));
+            var userGUIDParameter = userGUID.HasValue ?
+                new ObjectParameter("UserGUID", userGUID) :
+                new ObjectParameter("UserGUID", typeof(System.Guid));
     
             var familyidParameter = familyid.HasValue ?
                 new ObjectParameter("Familyid", familyid) :
@@ -92,7 +92,7 @@ namespace ReportingNew
                 new ObjectParameter("CategoryID", categoryID) :
                 new ObjectParameter("CategoryID", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<P_Mob_Get_ReportNames_Result>("P_Mob_Get_ReportNames", usernameParameter, familyidParameter, categoryIDParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<P_Mob_Get_ReportNames_Result>("P_Mob_Get_ReportNames", userGUIDParameter, familyidParameter, categoryIDParameter);
         }
     
         public virtual ObjectResult<P_Mob_Get_SitesForABrand_Result> P_Mob_Get_SitesForABrand(string username, Nullable<int> brandid)
@@ -106,6 +106,15 @@ namespace ReportingNew
                 new ObjectParameter("brandid", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<P_Mob_Get_SitesForABrand_Result>("P_Mob_Get_SitesForABrand", usernameParameter, brandidParameter);
+        }
+    
+        public virtual ObjectResult<P_Mob_Get_SitesForAUser_Result> P_Mob_Get_SitesForAUser(Nullable<System.Guid> userguid)
+        {
+            var userguidParameter = userguid.HasValue ?
+                new ObjectParameter("userguid", userguid) :
+                new ObjectParameter("userguid", typeof(System.Guid));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<P_Mob_Get_SitesForAUser_Result>("P_Mob_Get_SitesForAUser", userguidParameter);
         }
     }
 }

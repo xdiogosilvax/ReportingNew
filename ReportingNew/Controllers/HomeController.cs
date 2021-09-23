@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ReportingNew.Models;
+using System;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Data.Sql;
-using System.Data.SqlClient;
-using ReportingNew.Models;
-using System.Dynamic;
-using System.Net;
-
 namespace ReportingNew.Controllers
 {
     public class HomeController : Controller
@@ -17,19 +10,27 @@ namespace ReportingNew.Controllers
         public ActionResult Index()
         {
 
+           
+            var user = Guid.Parse("01181168-6215-4050-9F46-9B1DCAA1626E");
             //var returnFamilies = context.P_Mob_Get_ReportFamilies("John");
-
-            //return View(returnFamilies);
-
             var model = new SPMenuModel();
-            //model.BrandsSite = context.P_Mob_Get_BrandSites_Result("john",2,1).ToList();
-            //model.Brands_User = context.P_Mob_Get_BrandsForUser.ToList();
-            model.familiesReport= context.P_Mob_Get_ReportFamilies("John");
-            model.CategoriesReport = context.P_Mob_Get_ReportCategories("John", 1);
-            model.namesReport = context.P_Mob_Get_ReportNames("John", 1,2);
+            
+            model.familiesReport = context.P_Mob_Get_ReportFamilies(user).ToList();
+            model.CategoriesReport = context.P_Mob_Get_ReportCategories(user, 1).ToList();
+            model.namesReport= context.P_Mob_Get_ReportNames(user, 1, 1).ToList();
+            
 
-            model.Brands_User = context.P_Mob_Get_BrandsForUser("John");
-            model.BrandsSite = context.P_Mob_Get_BrandSites("John","The White Hart".ToString(),1);
+            /*
+            foreach (var cat in model.familiesReport = context.P_Mob_Get_ReportFamilies(user).ToList()) 
+            {
+                foreach (var name in model.CategoriesReport = context.P_Mob_Get_ReportCategories(user, cat.FamilyID).ToList())
+                {
+                    model.=context.P_Mob_Get_ReportNames(user, cat.FamilyID,name.CategoryID).ToList();
+                }
+            }
+          */
+            
+            model.sitesRep = context.P_Mob_Get_SitesForAUser(user).ToList();
 
 
             return View(model);
@@ -38,12 +39,25 @@ namespace ReportingNew.Controllers
 
 
 
-        //To be changed, being used for MvP
+        //TTest changed, being used for MvP
 
+        [HttpPost]
         public ActionResult urlMVP() 
         {
-            string url =("https://testreporting.quadranet.co.uk/reports/mobilereport/YesterdaySales?rs:Embed=True&Title=False");
 
+
+
+            var keys = Request.Form.AllKeys;
+
+            var site = Request.Form.Get(keys[0]);
+            var dateFrom = Request.Form.Get(keys[1]);
+            var dateTo = Request.Form.Get(keys[2]);
+
+            Console.WriteLine(site, dateTo, dateFrom);
+
+
+            string url =("https://testreporting.quadranet.co.uk/reports/mobilereport/YesterdaySales?rs:Embed=True&Title=False");
+            
            
            return Redirect(url);
         }

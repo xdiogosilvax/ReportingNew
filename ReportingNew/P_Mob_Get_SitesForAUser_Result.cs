@@ -11,10 +11,10 @@ namespace ReportingNew
 {
     using System;
     
-    public partial class P_Mob_Get_ReportNames_Result
+    public partial class P_Mob_Get_SitesForAUser_Result
     {
-        public Nullable<int> ReportID { get; set; }
-        public Nullable<int> categoryid { get; set; }
-        public string ReportName { get; set; }
+        public Nullable<int> Brandid { get; set; }
+        public Nullable<int> SiteID { get; set; }
+        public string SiteName { get; set; }
     }
 }

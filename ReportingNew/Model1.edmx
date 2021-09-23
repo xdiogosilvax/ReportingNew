@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="WarehouseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="WarehouseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <Function Name="P_Mob_Get_BrandsForUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="username" Type="nvarchar" Mode="In" />
         </Function>
@@ -24,14 +24,14 @@
           </ReturnType>
         </Function>
         <Function Name="P_Mob_Get_ReportCategories" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="username" Type="nvarchar" Mode="In" />
+          <Parameter Name="UserGUID" Type="uniqueidentifier" Mode="In" />
           <Parameter Name="Familyid" Type="int" Mode="In" />
         </Function>
         <Function Name="P_Mob_Get_ReportFamilies" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="username" Type="nvarchar" Mode="In" />
+          <Parameter Name="UserGUID" Type="uniqueidentifier" Mode="In" />
         </Function>
         <Function Name="P_Mob_Get_ReportNames" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="username" Type="nvarchar" Mode="In" />
+          <Parameter Name="UserGUID" Type="uniqueidentifier" Mode="In" />
           <Parameter Name="Familyid" Type="int" Mode="In" />
           <Parameter Name="CategoryID" Type="int" Mode="In" />
         </Function>
@@ -39,9 +39,11 @@
           <Parameter Name="username" Type="nvarchar" Mode="In" />
           <Parameter Name="brandid" Type="int" Mode="In" />
         </Function>
+        <Function Name="P_Mob_Get_SitesForAUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="userguid" Type="uniqueidentifier" Mode="In" />
+        </Function>
         <EntityContainer Name="WarehouseModelStoreContainer" />
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="WarehouseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -58,23 +60,26 @@
             <Parameter Name="SiteId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="P_Mob_Get_BrandsForUser" ReturnType="Collection(WarehouseModel.P_Mob_Get_BrandsForUser_Result)">
-            <Parameter Name="username" Mode="In" Type="String" />
+          <Parameter Name="username" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="P_Mob_Get_ReportCategories" ReturnType="Collection(WarehouseModel.P_Mob_Get_ReportCategories_Result)">
-            <Parameter Name="username" Mode="In" Type="String" />
+            <Parameter Name="UserGUID" Mode="In" Type="Guid" />
             <Parameter Name="Familyid" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="P_Mob_Get_ReportFamilies" ReturnType="Collection(WarehouseModel.P_Mob_Get_ReportFamilies_Result)">
-            <Parameter Name="username" Mode="In" Type="String" />
+          <Parameter Name="UserGUID" Mode="In" Type="Guid" />
           </FunctionImport>
           <FunctionImport Name="P_Mob_Get_ReportNames" ReturnType="Collection(WarehouseModel.P_Mob_Get_ReportNames_Result)">
-            <Parameter Name="username" Mode="In" Type="String" />
+            <Parameter Name="UserGUID" Mode="In" Type="Guid" />
             <Parameter Name="Familyid" Mode="In" Type="Int32" />
             <Parameter Name="CategoryID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="P_Mob_Get_SitesForABrand" ReturnType="Collection(WarehouseModel.P_Mob_Get_SitesForABrand_Result)">
             <Parameter Name="username" Mode="In" Type="String" />
             <Parameter Name="brandid" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="P_Mob_Get_SitesForAUser" ReturnType="Collection(WarehouseModel.P_Mob_Get_SitesForAUser_Result)">
+          <Parameter Name="userguid" Mode="In" Type="Guid" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="P_Mob_Get_BrandsForUser_Result">
@@ -94,11 +99,15 @@
           <Property Type="Int32" Name="ReportID" Nullable="true" />
           <Property Type="Int32" Name="categoryid" Nullable="true" />
           <Property Type="String" Name="ReportName" Nullable="true" MaxLength="50" />
-          <Property Type="Int32" Name="Allowed" Nullable="false" />
         </ComplexType>
         <ComplexType Name="P_Mob_Get_SitesForABrand_Result">
           <Property Type="Int32" Name="ID" Nullable="true" />
           <Property Type="String" Name="Text" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="P_Mob_Get_SitesForAUser_Result">
+          <Property Type="Int32" Name="Brandid" Nullable="true" />
+          <Property Type="Int32" Name="SiteID" Nullable="true" />
+          <Property Type="String" Name="SiteName" Nullable="true" MaxLength="50" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -147,7 +156,6 @@
                 <ScalarProperty Name="ReportID" ColumnName="ReportID" />
                 <ScalarProperty Name="categoryid" ColumnName="categoryid" />
                 <ScalarProperty Name="ReportName" ColumnName="ReportName" />
-                <ScalarProperty Name="Allowed" ColumnName="Allowed" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -156,6 +164,15 @@
               <ComplexTypeMapping TypeName="WarehouseModel.P_Mob_Get_SitesForABrand_Result">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Text" ColumnName="Text" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="P_Mob_Get_SitesForAUser" FunctionName="WarehouseModel.Store.P_Mob_Get_SitesForAUser">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.P_Mob_Get_SitesForAUser_Result">
+                <ScalarProperty Name="Brandid" ColumnName="Brandid" />
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="SiteName" ColumnName="SiteName" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
