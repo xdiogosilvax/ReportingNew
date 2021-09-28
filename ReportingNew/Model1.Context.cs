@@ -29,24 +29,6 @@ namespace ReportingNew
         }
     
     
-        [EdmFunction("WarehouseEntities", "P_Mob_Get_BrandSites")]
-        public virtual IQueryable<P_Mob_Get_BrandSites_Result> P_Mob_Get_BrandSites(string username, string brandGroup, Nullable<int> siteId)
-        {
-            var usernameParameter = username != null ?
-                new ObjectParameter("username", username) :
-                new ObjectParameter("username", typeof(string));
-    
-            var brandGroupParameter = brandGroup != null ?
-                new ObjectParameter("BrandGroup", brandGroup) :
-                new ObjectParameter("BrandGroup", typeof(string));
-    
-            var siteIdParameter = siteId.HasValue ?
-                new ObjectParameter("SiteId", siteId) :
-                new ObjectParameter("SiteId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<P_Mob_Get_BrandSites_Result>("[WarehouseEntities].[P_Mob_Get_BrandSites](@username, @BrandGroup, @SiteId)", usernameParameter, brandGroupParameter, siteIdParameter);
-        }
-    
         public virtual ObjectResult<P_Mob_Get_BrandsForUser_Result> P_Mob_Get_BrandsForUser(string username)
         {
             var usernameParameter = username != null ?
@@ -115,6 +97,35 @@ namespace ReportingNew
                 new ObjectParameter("userguid", typeof(System.Guid));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<P_Mob_Get_SitesForAUser_Result>("P_Mob_Get_SitesForAUser", userguidParameter);
+        }
+    
+        public virtual ObjectResult<P_Mob_GetReportURL_Result> P_Mob_GetReportURL(Nullable<int> reportid, Nullable<int> brandid, Nullable<int> siteid, string datefrom, string dateto, Nullable<System.Guid> userguid)
+        {
+            var reportidParameter = reportid.HasValue ?
+                new ObjectParameter("reportid", reportid) :
+                new ObjectParameter("reportid", typeof(int));
+    
+            var brandidParameter = brandid.HasValue ?
+                new ObjectParameter("brandid", brandid) :
+                new ObjectParameter("brandid", typeof(int));
+    
+            var siteidParameter = siteid.HasValue ?
+                new ObjectParameter("siteid", siteid) :
+                new ObjectParameter("siteid", typeof(int));
+    
+            var datefromParameter = datefrom != null ?
+                new ObjectParameter("datefrom", datefrom) :
+                new ObjectParameter("datefrom", typeof(string));
+    
+            var datetoParameter = dateto != null ?
+                new ObjectParameter("dateto", dateto) :
+                new ObjectParameter("dateto", typeof(string));
+    
+            var userguidParameter = userguid.HasValue ?
+                new ObjectParameter("userguid", userguid) :
+                new ObjectParameter("userguid", typeof(System.Guid));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<P_Mob_GetReportURL_Result>("P_Mob_GetReportURL", reportidParameter, brandidParameter, siteidParameter, datefromParameter, datetoParameter, userguidParameter);
         }
     }
 }

@@ -147,6 +147,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
+    <Compile Include="P_Mob_GetReportURL_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="P_Mob_Get_BrandsForUser_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

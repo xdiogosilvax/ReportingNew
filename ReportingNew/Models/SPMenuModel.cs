@@ -16,6 +16,7 @@ namespace ReportingNew.Models
         public IEnumerable<P_Mob_Get_ReportFamilies_Result> familiesReport{ get; set; }
         public IEnumerable<P_Mob_Get_ReportNames_Result> namesReport{ get; set; }
         public IEnumerable<P_Mob_Get_SitesForAUser_Result> sitesRep { get; set; }
+        public IEnumerable<P_Mob_GetReportURL_Result> reportURL { get; set; }
 
         //public IEnumerable<P_Mob_Get_SitesForABrand_Result> sitesForABrand { get; set; }
     }

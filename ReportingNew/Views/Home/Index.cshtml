@@ -126,33 +126,44 @@
 
     <div id="mySidebar" class="sidebar navbar-static-top">
         @model SPMenuModel
+
+
+
         <a href="#"></a>
-        @foreach (var family in Model.familiesReport)
-        {
-            <ul>
-                <a href="#" class="menu_fam">@family.FamilyName</a>
+       
+        <ul>
+            @foreach (var fam in Model.familiesReport)
+            {
+                <a href="#" class="menu_fam">@fam.FamilyName @fam.FamilyID</a>
+                
+
                 <ul class="">
                     @foreach (var cat in Model.CategoriesReport)
+
                     {
-                        <li href="#" class=""><a class="menu_cat"> @cat.Category</a></li>
 
-                    
-                    <ul class="">
-                        @foreach (var name in Model.namesReport)
+                        <li href="#" class=""><a class="menu_cat"> @cat.CategoryID @cat.Category </a></li>
+
+
+                        foreach (var name in Model.namesReport)
                         {
-                            <li href="#" class=""><a href="home/urlMVP"  class="menu_name"> @name.ReportName</a></li>
+                            <ul class="">
+                                <li href="" class=""><a class="menu_name" id="getReport" href=""> @name.ReportID @name.ReportName  </a></li>
+                            </ul>
                         }
-
-                    </ul>
                     }
                 </ul>
-                   
-            </ul>
-        }
-        
+
+            }
+
+        </ul>
+      
 
         
     </div>
+
+
+
 
     <div id="main">
         <span id="one" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>
@@ -162,7 +173,12 @@
 
     <div class="container center">
 
-        <form method="POST" action="Home/urlMVP">
+        <form method="POST" action="home/test">
+
+   
+
+
+
             <div class="form-group">
                 <!-- Example single danger button -->
                 <label>Site</label>
@@ -183,11 +199,11 @@
             <!--  -->
             <div class="form-group">
                 <label for="exampleFormControlTextarea1">Date From</label>
-                <input type="date" class="form-control" name="dateFrom">
+                <input type="date" required class="form-control" name="dateFrom">
             </div>
             <div class="form-group">
                 <label for="exampleFormControlTextarea1">Date To</label>
-                <input type="date" class="form-control" name="dateTo">
+                <input type="date" required class="form-control" name="dateTo">
             </div>
 
             <div class="row">

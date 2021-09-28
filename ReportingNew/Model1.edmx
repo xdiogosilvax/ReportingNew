@@ -8,21 +8,6 @@
         <Function Name="P_Mob_Get_BrandsForUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="username" Type="nvarchar" Mode="In" />
         </Function>
-        <Function Name="P_Mob_Get_BrandSites" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="username" Type="nvarchar" Mode="In" />
-          <Parameter Name="BrandGroup" Type="nvarchar" Mode="In" />
-          <Parameter Name="SiteId" Type="int" Mode="In" />
-          <ReturnType>
-            <CollectionType>
-              <RowType>
-                <Property Name="BrandId" Type="int" />
-                <Property Name="SiteId" Type="int" />
-                <Property Name="SiteName" Type="nvarchar" MaxLength="50" />
-                <Property Name="BrandName" Type="nvarchar" MaxLength="50" />
-              </RowType>
-            </CollectionType>
-          </ReturnType>
-        </Function>
         <Function Name="P_Mob_Get_ReportCategories" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserGUID" Type="uniqueidentifier" Mode="In" />
           <Parameter Name="Familyid" Type="int" Mode="In" />
@@ -42,6 +27,14 @@
         <Function Name="P_Mob_Get_SitesForAUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="userguid" Type="uniqueidentifier" Mode="In" />
         </Function>
+        <Function Name="P_Mob_GetReportURL" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="reportid" Type="int" Mode="In" />
+          <Parameter Name="brandid" Type="int" Mode="In" />
+          <Parameter Name="siteid" Type="int" Mode="In" />
+          <Parameter Name="datefrom" Type="varchar" Mode="In" />
+          <Parameter Name="dateto" Type="varchar" Mode="In" />
+          <Parameter Name="userguid" Type="uniqueidentifier" Mode="In" />
+        </Function>
         <EntityContainer Name="WarehouseModelStoreContainer" />
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -54,11 +47,6 @@
           <Property Name="BrandName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </ComplexType>
         <EntityContainer Name="WarehouseEntities" annotation:LazyLoadingEnabled="true">
-          <FunctionImport Name="P_Mob_Get_BrandSites" IsComposable="true" ReturnType="Collection(WarehouseModel.P_Mob_Get_BrandSites_Result)">
-            <Parameter Name="username" Mode="In" Type="String" />
-            <Parameter Name="BrandGroup" Mode="In" Type="String" />
-            <Parameter Name="SiteId" Mode="In" Type="Int32" />
-          </FunctionImport>
           <FunctionImport Name="P_Mob_Get_BrandsForUser" ReturnType="Collection(WarehouseModel.P_Mob_Get_BrandsForUser_Result)">
           <Parameter Name="username" Mode="In" Type="String" />
           </FunctionImport>
@@ -80,6 +68,14 @@
           </FunctionImport>
           <FunctionImport Name="P_Mob_Get_SitesForAUser" ReturnType="Collection(WarehouseModel.P_Mob_Get_SitesForAUser_Result)">
           <Parameter Name="userguid" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="P_Mob_GetReportURL" ReturnType="Collection(WarehouseModel.P_Mob_GetReportURL_Result)">
+            <Parameter Name="reportid" Mode="In" Type="Int32" />
+            <Parameter Name="brandid" Mode="In" Type="Int32" />
+            <Parameter Name="siteid" Mode="In" Type="Int32" />
+            <Parameter Name="datefrom" Mode="In" Type="String" />
+            <Parameter Name="dateto" Mode="In" Type="String" />
+            <Parameter Name="userguid" Mode="In" Type="Guid" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="P_Mob_Get_BrandsForUser_Result">
@@ -109,22 +105,15 @@
           <Property Type="Int32" Name="SiteID" Nullable="true" />
           <Property Type="String" Name="SiteName" Nullable="true" MaxLength="50" />
         </ComplexType>
+        <ComplexType Name="P_Mob_GetReportURL_Result">
+          <Property Type="String" Name="URL" Nullable="false" MaxLength="8" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="WarehouseModelStoreContainer" CdmEntityContainer="WarehouseEntities">
-          <FunctionImportMapping FunctionName="WarehouseModel.Store.P_Mob_Get_BrandSites" FunctionImportName="P_Mob_Get_BrandSites">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="WarehouseModel.P_Mob_Get_BrandSites_Result">
-                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
-                <ScalarProperty Name="SiteId" ColumnName="SiteId" />
-                <ScalarProperty Name="SiteName" ColumnName="SiteName" />
-                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="P_Mob_Get_BrandsForUser" FunctionName="WarehouseModel.Store.P_Mob_Get_BrandsForUser">
             <ResultMapping>
               <ComplexTypeMapping TypeName="WarehouseModel.P_Mob_Get_BrandsForUser_Result">
@@ -173,6 +162,13 @@
                 <ScalarProperty Name="Brandid" ColumnName="Brandid" />
                 <ScalarProperty Name="SiteID" ColumnName="SiteID" />
                 <ScalarProperty Name="SiteName" ColumnName="SiteName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="P_Mob_GetReportURL" FunctionName="WarehouseModel.Store.P_Mob_GetReportURL" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.P_Mob_GetReportURL_Result">
+                <ScalarProperty Name="URL" ColumnName="URL" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
