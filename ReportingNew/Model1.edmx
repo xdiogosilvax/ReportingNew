@@ -100,14 +100,14 @@
           <Property Type="Int32" Name="SiteID" Nullable="true" />
           <Property Type="String" Name="SiteName" Nullable="true" MaxLength="50" />
         </ComplexType>
-        <ComplexType Name="P_Mob_GetReportURL_Result">
-          <Property Type="String" Name="URL" Nullable="false" MaxLength="8" />
-        </ComplexType>
         <ComplexType Name="P_Mob_Get_ReportCategories_Result">
           <Property Type="Int32" Name="familyid" Nullable="true" />
           <Property Type="Int32" Name="CategoryID" Nullable="true" />
           <Property Type="String" Name="Category" Nullable="true" MaxLength="50" />
           <Property Type="Int32" Name="Allowed" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="P_Mob_GetReportURL_Result">
+          <Property Type="String" Name="URL" Nullable="false" MaxLength="221" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>

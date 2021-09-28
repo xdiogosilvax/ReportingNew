@@ -1,6 +1,7 @@
 ﻿using ReportingNew.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Objects;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
@@ -27,15 +28,15 @@ namespace ReportingNew.Controllers
 
 
 
-            
-              //var user = Guid.Parse("01181168-6215-4050-9F46-9B1DCAA1626E");
-               model.familiesReport = context.P_Mob_Get_ReportFamilies(user).ToList();
-               model.CategoriesReport = context.P_Mob_Get_ReportCategories(user,1).ToList();
-               model.namesReport = context.P_Mob_Get_ReportNames(user, 1, 2).ToList();
-            
+
+            //var user = Guid.Parse("01181168-6215-4050-9F46-9B1DCAA1626E");
+            model.familiesReport = context.P_Mob_Get_ReportFamilies(user).ToList();
+            model.CategoriesReport = context.P_Mob_Get_ReportCategories(user, 1).ToList();
+            model.namesReport = context.P_Mob_Get_ReportNames(user, 1, 2).ToList();
 
 
-            
+
+
             /*
             foreach (var cat in model.familiesReport = context.P_Mob_Get_ReportFamilies(user).ToList()) 
              {
@@ -55,7 +56,7 @@ namespace ReportingNew.Controllers
           
             }
           */
-            
+
             model.sitesRep = context.P_Mob_Get_SitesForAUser(user).ToList();
             return View(model);
 
@@ -68,63 +69,49 @@ namespace ReportingNew.Controllers
 
         //Test changed, being used for MvP
 
-        [HttpPost]
-        public ActionResult urlMVP() 
+       
+        public ActionResult urlT()
         {
 
             SPMenuModel model = new SPMenuModel();
             var user = Guid.Parse("01181168-6215-4050-9F46-9B1DCAA1626E");
 
             var keys = Request.Form.AllKeys;
-           
+
             var site = Request.Form.Get(keys[0]);
             var dateFrom = Request.Form.Get(keys[1]);
             var dateTo = Request.Form.Get(keys[2]);
-            var url = ("https://qsl-rep-srv01/ReportS/mobilereport/YesterdaySales");
+
+            //var url = ("https://qsl-rep-srv01/ReportS/mobilereport/YesterdaySales");
 
             //Console.WriteLine(site, dateTo, dateFrom);
             P_Mob_GetReportURL_Result test = new P_Mob_GetReportURL_Result();
 
-
-            var shit = context.P_Mob_GetReportURL(1, 1, 1, dateFrom, dateTo, user).ToString();
-
-
-
-            var request = (HttpWebRequest)WebRequest.Create(url);
-
-            request.Method = "GET";
-            request.UseDefaultCredentials = false;
-            request.PreAuthenticate = true;
-
-            var cred = new NetworkCredential("Quadranet\\Qnreporting","QuadraN3t!1");
-            var cache = new CredentialCache();
-            cache.Add(new Uri(url), "Basic", cred);
-
-            request.Credentials = cache;
-            var response = (HttpWebResponse)request.GetResponse();
-
-            return Redirect(response.ResponseUri.ToString());
+            ObjectResult<P_Mob_GetReportURL_Result> objectResult = context.P_Mob_GetReportURL(1, 1, 1, dateFrom, dateTo, user);
+            var testw = "0"; 
 
 
+            foreach (var xtest in objectResult.AsEnumerable())
+            {
+                Console.WriteLine(xtest.URL);
+                testw = xtest.URL.ToString();
+            }
 
-          //  return Redirect(url);
+            //model.reportURL = context.P_Mob_GetReportURL(1, 1, 1, dateFrom, dateTo, user);
+
+            
+            //  var result = context.P_Mob_GetReportURL_Result.SqlQuery("EXEC YourStoredProcedure @SomeParameter",
+            //             new SqlParameter("@SomeParameter", TheParameterValue)).ToList();
 
 
+            //var url = context.P_Mob_GetReportURL(1, 1, 1, dateFrom, dateTo, user).ToString();
+            //test.URL.ToString();
 
-            // P_Mob_GetReportURL_Result test = new P_Mob_GetReportURL_Result();
-             //return Redirect(context.P_Mob_GetReportURL(1, 1, 1, dateFrom, dateTo, user));
 
-        }
-        
-        public ActionResult test() 
-        {
-            ServicePointManager.ServerCertificateValidationCallback = new
-          RemoteCertificateValidationCallback
-          (
-             delegate { return true; }
-          );
-            string redirectUrl = "https://qsl-rep-srv01/ReportS/mobilereport/YesterdaySales";
-            var request = (HttpWebRequest)WebRequest.Create(redirectUrl);
+            //////////
+            ///
+
+            var request = (HttpWebRequest)WebRequest.Create(testw);
 
             request.Method = "GET";
             request.UseDefaultCredentials = false;
@@ -132,19 +119,30 @@ namespace ReportingNew.Controllers
 
             var cred = new NetworkCredential("Quadranet\\Qnreporting", "QuadraN3t!1");
             var cache = new CredentialCache();
-            cache.Add(new Uri(redirectUrl), "Basic", cred);
+            cache.Add(new Uri(testw), "Basic", cred);
 
-          
+            
+            ServicePointManager.ServerCertificateValidationCallback = new
+         RemoteCertificateValidationCallback
+         (
+            delegate { return true; }
+         );
 
+            
             request.Credentials = cache;
             var response = (HttpWebResponse)request.GetResponse();
 
             return Redirect(response.ResponseUri.ToString());
-           
+
+
+
+
+            ///////
+
+
 
 
         }
-    }
 
 
         /*
@@ -164,5 +162,5 @@ namespace ReportingNew.Controllers
         */
 
 
-    
+    }
 }
