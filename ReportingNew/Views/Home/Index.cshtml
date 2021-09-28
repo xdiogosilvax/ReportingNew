@@ -141,7 +141,7 @@
      
             @foreach (var fam in Model.familiesReport)
             {
-                <a href="#" class="menu_fam">@fam.FamilyName @fam.FamilyID</a>
+                <a href="#" class="menu_fam"> @fam.FamilyName</a>
                 
 
                 <ul class="">
@@ -150,7 +150,7 @@
                     {
                         @fam.FamilyID.Equals(cat.familyid);
                       
-                      <li href="#" class=""><a class="menu_cat"> @cat.CategoryID @cat.Category </a></li>
+                      <li href="#" class=""><a class="menu_cat"> @cat.Category </a></li>
                         }
                         
 
@@ -158,7 +158,7 @@
                         @foreach (var name in Model.namesReport)
                         {
                 <ul class="">
-                        <li href="" class=""><a class="menu_name" id="getReport" href=""> @name.ReportID @name.ReportName  </a></li>
+                        <li href="" class=""><a class="menu_name" id="getReport" href="">@name.ReportName  </a></li>
 
                 </ul>
                         }
@@ -186,25 +186,38 @@
 
         <form method="POST" action="home/urlT">
 
-   
+
 
 
 
             <div class="form-group">
                 <!-- Example single danger button -->
                 <label>Site</label>
-                <select class="form-control" name="siteN">
 
+                <select class="form-control" name="siteN">
                     @foreach (var site in Model.sitesRep)
                     {
+
                         <option>@site.SiteName</option>
+
                     }
 
-
                 </select>
+            </div>
+            <div class="form-group">
 
+                @foreach (var brand in Model.sitesRep.ToList())
+                {
+                    <input type="" name="BrandN" value="@brand.Brandid.Value">
+                }
+
+                 
+    
+
+                </input>
 
             </div>
+
 
 
             <!--  -->

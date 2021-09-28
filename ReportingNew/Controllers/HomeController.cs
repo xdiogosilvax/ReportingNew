@@ -37,27 +37,9 @@ namespace ReportingNew.Controllers
 
 
 
-            /*
-            foreach (var cat in model.familiesReport = context.P_Mob_Get_ReportFamilies(user).ToList()) 
-             {
-                model.familiesReport.Append(cat);
-                foreach (var name in model.CategoriesReport)
-                {
-
-                    var  = context.P_Mob_Get_ReportCategories(user, cat.FamilyID).ToList();
-                    //model.CategoriesReport.Append(name);
-                    foreach (var test in model.namesReport = context.P_Mob_Get_ReportNames(user, cat.FamilyID, name.CategoryID).ToList())
-                    {
-
-                        model.namesReport.Append(test);
-                    }
-                    
-                 }
-          
-            }
-          */
 
             model.sitesRep = context.P_Mob_Get_SitesForAUser(user).ToList();
+            ViewBag.Brand = model.sitesRep;
             return View(model);
 
 
@@ -79,39 +61,29 @@ namespace ReportingNew.Controllers
             var keys = Request.Form.AllKeys;
 
             var site = Request.Form.Get(keys[0]);
-            var dateFrom = Request.Form.Get(keys[1]);
-            var dateTo = Request.Form.Get(keys[2]);
+            var brand = Request.Form.Get(keys[1]);
+            var dateFrom = Request.Form.Get(keys[2]);
+            var dateTo = Request.Form.Get(keys[3]);
+            var urlFromSP = "0";
 
-            //var url = ("https://qsl-rep-srv01/ReportS/mobilereport/YesterdaySales");
-
-            //Console.WriteLine(site, dateTo, dateFrom);
             P_Mob_GetReportURL_Result test = new P_Mob_GetReportURL_Result();
-
-            ObjectResult<P_Mob_GetReportURL_Result> objectResult = context.P_Mob_GetReportURL(1, 1, 1, dateFrom, dateTo, user);
-            var testw = "0"; 
+            //ObjectResult<P_> objectResult_BrandID = context.P_Mob_Get_SitesForAUser(user);
 
 
-            foreach (var xtest in objectResult.AsEnumerable())
+
+
+
+            ObjectResult<P_Mob_GetReportURL_Result> objectResultURL = context.P_Mob_GetReportURL(1, 1, 1, dateFrom, dateTo, user);
+
+
+            foreach (var reportURL_Result in objectResultURL.AsEnumerable())
             {
-                Console.WriteLine(xtest.URL);
-                testw = xtest.URL.ToString();
+                urlFromSP = reportURL_Result.URL.ToString();
             }
 
-            //model.reportURL = context.P_Mob_GetReportURL(1, 1, 1, dateFrom, dateTo, user);
+      
 
-            
-            //  var result = context.P_Mob_GetReportURL_Result.SqlQuery("EXEC YourStoredProcedure @SomeParameter",
-            //             new SqlParameter("@SomeParameter", TheParameterValue)).ToList();
-
-
-            //var url = context.P_Mob_GetReportURL(1, 1, 1, dateFrom, dateTo, user).ToString();
-            //test.URL.ToString();
-
-
-            //////////
-            ///
-
-            var request = (HttpWebRequest)WebRequest.Create(testw);
+            var request = (HttpWebRequest)WebRequest.Create(urlFromSP);
 
             request.Method = "GET";
             request.UseDefaultCredentials = false;
@@ -119,7 +91,7 @@ namespace ReportingNew.Controllers
 
             var cred = new NetworkCredential("Quadranet\\Qnreporting", "QuadraN3t!1");
             var cache = new CredentialCache();
-            cache.Add(new Uri(testw), "Basic", cred);
+            cache.Add(new Uri(urlFromSP), "Basic", cred);
 
             
             ServicePointManager.ServerCertificateValidationCallback = new
