@@ -13,6 +13,7 @@ namespace ReportingNew
     
     public partial class P_Mob_Get_ReportCategories_Result
     {
+        public Nullable<int> familyid { get; set; }
         public Nullable<int> CategoryID { get; set; }
         public string Category { get; set; }
         public int Allowed { get; set; }

@@ -82,11 +82,6 @@
           <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="String" Name="Text" Nullable="false" MaxLength="250" />
         </ComplexType>
-        <ComplexType Name="P_Mob_Get_ReportCategories_Result">
-          <Property Type="Int32" Name="CategoryID" Nullable="true" />
-          <Property Type="String" Name="Category" Nullable="true" MaxLength="50" />
-          <Property Type="Int32" Name="Allowed" Nullable="false" />
-        </ComplexType>
         <ComplexType Name="P_Mob_Get_ReportFamilies_Result">
           <Property Type="Int32" Name="FamilyID" Nullable="true" />
           <Property Type="String" Name="FamilyName" Nullable="true" MaxLength="50" />
@@ -108,6 +103,12 @@
         <ComplexType Name="P_Mob_GetReportURL_Result">
           <Property Type="String" Name="URL" Nullable="false" MaxLength="8" />
         </ComplexType>
+        <ComplexType Name="P_Mob_Get_ReportCategories_Result">
+          <Property Type="Int32" Name="familyid" Nullable="true" />
+          <Property Type="Int32" Name="CategoryID" Nullable="true" />
+          <Property Type="String" Name="Category" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="Allowed" Nullable="false" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -125,6 +126,7 @@
           <FunctionImportMapping FunctionImportName="P_Mob_Get_ReportCategories" FunctionName="WarehouseModel.Store.P_Mob_Get_ReportCategories">
             <ResultMapping>
               <ComplexTypeMapping TypeName="WarehouseModel.P_Mob_Get_ReportCategories_Result">
+                <ScalarProperty Name="familyid" ColumnName="familyid" />
                 <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
                 <ScalarProperty Name="Category" ColumnName="Category" />
                 <ScalarProperty Name="Allowed" ColumnName="Allowed" />

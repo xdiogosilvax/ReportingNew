@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Security;
 using System.Text;
 using System.Web.Mvc;
 namespace ReportingNew.Controllers
@@ -24,39 +25,42 @@ namespace ReportingNew.Controllers
 
 
 
+
+
+            
+              //var user = Guid.Parse("01181168-6215-4050-9F46-9B1DCAA1626E");
+               model.familiesReport = context.P_Mob_Get_ReportFamilies(user).ToList();
+               model.CategoriesReport = context.P_Mob_Get_ReportCategories(user,1).ToList();
+               model.namesReport = context.P_Mob_Get_ReportNames(user, 1, 2).ToList();
+            
+
+
             
             /*
-              //var user = Guid.Parse("01181168-6215-4050-9F46-9B1DCAA1626E");
-              model.familiesReport = context.P_Mob_Get_ReportFamilies(user).ToList();
-              model.CategoriesReport = context.P_Mob_Get_ReportCategories(user, 4).ToList();
-              model.namesReport = context.P_Mob_Get_ReportNames(user, 2, 3).ToList();
-            */
-            
-            
-            
-            
             foreach (var cat in model.familiesReport = context.P_Mob_Get_ReportFamilies(user).ToList()) 
              {
-                Console.WriteLine(cat.FamilyName);
-                foreach (var name in model.CategoriesReport = context.P_Mob_Get_ReportCategories(user, cat.FamilyID).ToList())
+                model.familiesReport.Append(cat);
+                foreach (var name in model.CategoriesReport)
                 {
-                    model.namesReport = context.P_Mob_Get_ReportNames(user, cat.FamilyID, name.CategoryID).ToList();
 
+                    var  = context.P_Mob_Get_ReportCategories(user, cat.FamilyID).ToList();
+                    //model.CategoriesReport.Append(name);
                     foreach (var test in model.namesReport = context.P_Mob_Get_ReportNames(user, cat.FamilyID, name.CategoryID).ToList())
                     {
-                        Console.WriteLine(test.ReportName);
-                        
+
+                        model.namesReport.Append(test);
                     }
                     
                  }
           
             }
-          
+          */
             
             model.sitesRep = context.P_Mob_Get_SitesForAUser(user).ToList();
-
-
             return View(model);
+
+
+
 
         }
 
@@ -114,13 +118,12 @@ namespace ReportingNew.Controllers
         
         public ActionResult test() 
         {
+            ServicePointManager.ServerCertificateValidationCallback = new
+          RemoteCertificateValidationCallback
+          (
+             delegate { return true; }
+          );
             string redirectUrl = "https://qsl-rep-srv01/ReportS/mobilereport/YesterdaySales";
-            //Response.AppendHeader("Username", "Quadranet\\Qnreporting");
-            //Response.AppendHeader("Password", "QuadraN3t!1");
-            //Response.Status = "301 Moved permanently";
-            //Response.AppendHeader("Location", appURL);
-            //Response.End();
-
             var request = (HttpWebRequest)WebRequest.Create(redirectUrl);
 
             request.Method = "GET";
@@ -131,10 +134,13 @@ namespace ReportingNew.Controllers
             var cache = new CredentialCache();
             cache.Add(new Uri(redirectUrl), "Basic", cred);
 
+          
+
             request.Credentials = cache;
             var response = (HttpWebResponse)request.GetResponse();
 
             return Redirect(response.ResponseUri.ToString());
+           
 
 
         }

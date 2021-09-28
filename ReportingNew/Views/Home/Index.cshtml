@@ -132,6 +132,13 @@
         <a href="#"></a>
        
         <ul>
+
+
+
+
+
+
+     
             @foreach (var fam in Model.familiesReport)
             {
                 <a href="#" class="menu_fam">@fam.FamilyName @fam.FamilyID</a>
@@ -141,15 +148,19 @@
                     @foreach (var cat in Model.CategoriesReport)
 
                     {
+                        @fam.FamilyID.Equals(cat.familyid);
+                      
+                      <li href="#" class=""><a class="menu_cat"> @cat.CategoryID @cat.Category </a></li>
+                        }
+                        
 
-                        <li href="#" class=""><a class="menu_cat"> @cat.CategoryID @cat.Category </a></li>
 
-
-                        foreach (var name in Model.namesReport)
+                        @foreach (var name in Model.namesReport)
                         {
-                            <ul class="">
-                                <li href="" class=""><a class="menu_name" id="getReport" href=""> @name.ReportID @name.ReportName  </a></li>
-                            </ul>
+                <ul class="">
+                        <li href="" class=""><a class="menu_name" id="getReport" href=""> @name.ReportID @name.ReportName  </a></li>
+
+                </ul>
                         }
                     }
                 </ul>
