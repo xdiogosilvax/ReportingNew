@@ -44,7 +44,6 @@ namespace ReportingNew.Controllers
 
 
 
-
         }
 
 
@@ -60,8 +59,8 @@ namespace ReportingNew.Controllers
 
             var keys = Request.Form.AllKeys;
 
-            var site = Request.Form.Get(keys[0]);
-            var brand = Request.Form.Get(keys[1]);
+            var site =Request.Form.Get(keys[0]);
+            var brand =Request.Form.Get(keys[1]);
             var dateFrom = Request.Form.Get(keys[2]);
             var dateTo = Request.Form.Get(keys[3]);
             var urlFromSP = "0";
@@ -105,15 +104,6 @@ namespace ReportingNew.Controllers
             var response = (HttpWebResponse)request.GetResponse();
 
             return Redirect(response.ResponseUri.ToString());
-
-
-
-
-            ///////
-
-
-
-
         }
 
 

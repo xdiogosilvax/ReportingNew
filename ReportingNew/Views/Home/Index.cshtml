@@ -142,27 +142,23 @@
             @foreach (var fam in Model.familiesReport)
             {
                 <a href="#" class="menu_fam"> @fam.FamilyName</a>
-                
 
                 <ul class="">
-                    @foreach (var cat in Model.CategoriesReport)
+                @foreach (var cat in Model.CategoriesReport)
 
-                    {
-                        @fam.FamilyID.Equals(cat.familyid);
-                      
-                      <li href="#" class=""><a class="menu_cat"> @cat.Category </a></li>
-                        }
+                {
+                    <li href="#" class=""><a class="menu_cat"> @cat.Category </a></li>
+                }
                         
 
 
-                        @foreach (var name in Model.namesReport)
-                        {
+                @foreach (var name in Model.namesReport)
+                {
                 <ul class="">
-                        <li href="" class=""><a class="menu_name" id="getReport" href="">@name.ReportName  </a></li>
-
+                    <li href="" class=""><a class="menu_name" id="getReport" href="">@name.ReportName  </a></li>
                 </ul>
-                        }
-                    }
+                }
+                    
                 </ul>
 
             }
@@ -208,13 +204,13 @@
 
                 @foreach (var brand in Model.sitesRep.ToList())
                 {
-                    <input type="" name="BrandN" value="@brand.Brandid.Value">
+                    <input type="" name="BrandN" value="@brand.Brandid.Value"></input>
                 }
 
-                 
-    
 
-                </input>
+
+
+
 
             </div>
 
