@@ -63,7 +63,7 @@ namespace ReportingNew
         public virtual ObjectResult<P_Mob_Get_ReportNames_Result> P_Mob_Get_ReportNames(Nullable<System.Guid> userGUID, Nullable<int> familyid, Nullable<int> categoryID)
         {
             var userGUIDParameter = userGUID.HasValue ?
-                new ObjectParameter("UserGUID", userGUID) :
+                new ObjectParameter("UserGUID", userGUID) : 
                 new ObjectParameter("UserGUID", typeof(System.Guid));
     
             var familyidParameter = familyid.HasValue ?

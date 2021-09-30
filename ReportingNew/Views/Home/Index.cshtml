@@ -125,7 +125,7 @@
     </div>
 
     <div id="mySidebar" class="sidebar navbar-static-top">
-        @model SPMenuModel
+        @model FamilyResultResponse
 
 
 
@@ -135,26 +135,28 @@
 
 
      
-            @foreach (var fam in Model.familiesReport)
+            @foreach (var fam in Model.Families)
             {
                 <a href="#" class="menu_fam"> @fam.FamilyName</a>
 
                 <ul class="">
-                @foreach (var cat in Model.CategoriesReport)
+                    @foreach (var cat in fam.FamilyCat)
 
-                {
-                    <li href="#" class=""><a class="menu_cat"> @cat.Category </a></li>
-                }
-                        
+                    {
+
+                        <li href="#" class=""><a class="menu_cat"> @cat.Category </a></li>
+                        foreach (var name in cat.FamilCatRep)
+                        {
+                            <ul class="">
+                                <li class=""><a href="@Url.Action("getReport", "Home", new {reportID=@name.ReportID })" class="menu_name" id="getReport" href="">@name.ReportName  </a></li>
+                            </ul>
+                        }
+                    }
 
 
-                @foreach (var name in Model.namesReport)
-                {
-                <ul class="">
-                    <li href="" class=""><a class="menu_name" id="getReport" href="">@name.ReportName  </a></li>
-                </ul>
-                }
-                    
+
+
+
                 </ul>
 
             }
@@ -172,62 +174,11 @@
     </div>
 
 
-    <div class="container center">
-
-        <form method="POST" action="home/urlT/id">
-
-
-
-            <div class="form-group">
-                <!-- Example single danger button -->
-                <label>Site</label>
-
-                <select class="form-control" name="siteN">
-                    @foreach (var site in Model.sitesRep)
-                    {
-                        <option>@site.SiteName</option>
-                    }
-
-                </select>
-
-
-            </div>
-           
-
-                
-
-
-     
+    
+    @Html.Action("LoadForm","Home", new ReportingNew.Models.SPMenuModel())
 
 
 
-            <!--  -->
-            <div class="form-group">
-                <label for="exampleFormControlTextarea1">Date From</label>
-                <input type="date" required class="form-control" name="dateFrom">
-            </div>
-            <div class="form-group">
-                <label for="exampleFormControlTextarea1">Date To</label>
-                <input type="date" required class="form-control" name="dateTo">
-            </div>
-
-            <div class="row">
-
-                <button type="submit" class="btn btn-success">Take me to the report</button>
-
-                <button type="button" class="btn btn-danger">Clear</button>
-            </div>
-
-        </form>
-        <hr/>
-
-
-
-
-        <footer class="center">
-            <p>&copy; @DateTime.Now.Year - Quadranet</p>
-        </footer>
-    </div>
 
     <script>
 
