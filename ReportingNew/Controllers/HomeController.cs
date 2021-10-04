@@ -25,9 +25,7 @@ namespace ReportingNew.Controllers
         public ActionResult Index(Guid? ID)
         {
 
-            try
-            {
-
+           
         
             // var user = userID;
             //var returnFamilies = context.P_Mob_Get_ReportFamilies("John");
@@ -91,11 +89,8 @@ namespace ReportingNew.Controllers
 
 
             return View(model);
-            }
-            catch(Exception ex)
-            {
-
-            }
+            
+           
 
         }
 
