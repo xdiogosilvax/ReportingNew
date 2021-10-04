@@ -11,18 +11,14 @@ using System.Net.Http.Headers;
 using System.Net.Security;
 using System.Text;
 using System.Web.Mvc;
-using ReportingNew.Models;
 namespace ReportingNew.Controllers
 {
     public class HomeController : Controller
     {
         WarehouseEntities context = new WarehouseEntities();
 
-
-
-
-
-        public ActionResult Index(Guid? userID)
+        
+        public ActionResult Index(Guid? ID)
         {
 
             
@@ -31,10 +27,10 @@ namespace ReportingNew.Controllers
             var model = new FamilyResultResponse();
             model.Families=new List<Family>();
             SPMenuModel modelSPMEnu = new SPMenuModel();
-            userID = Guid.Parse("01181168-6215-4050-9F46-9B1DCAA1626E");
+            Guid userID = ID.Value;
+            TempData["userID"] = ID.Value;
 
 
-         
 
 
             foreach (var f in context.P_Mob_Get_ReportFamilies(userID).ToList())
@@ -85,31 +81,28 @@ namespace ReportingNew.Controllers
 
             modelSPMEnu.familyResult = model;
 
-
             return View(model);
 
 
-        }
+        }   
 
 
     
         public ActionResult getReport(int reportid)
         {
            
-
             TempData["RepID"] = reportid;
 
             return RedirectToAction("Index");
            
 
-            
         }
 
-        public ActionResult urlT(Guid? user_id)
+        public ActionResult urlT()
         {
             SPMenuModel model = new SPMenuModel();
-            user_id = Guid.Parse("01181168-6215-4050-9F46-9B1DCAA1626E");
-
+            // user_id = Guid.Parse("01181168-6215-4050-9F46-9B1DCAA1626E");
+            var user_id =(Guid) TempData["userID"];
             var keys = Request.Form.AllKeys;
 
             var site = Request.Form.Get(keys[0]);
@@ -117,7 +110,7 @@ namespace ReportingNew.Controllers
             var dateTo = Request.Form.Get(keys[2]);
             var urlFromSP = "0";
             var repID = Convert.ToInt32(TempData["RepID"]);
-                
+
 
             var brand = 0;
             var siteID = 0;
@@ -162,18 +155,16 @@ namespace ReportingNew.Controllers
 
 
 
-
             request.Credentials = cache;
             var response = (HttpWebResponse)request.GetResponse();
 
             return Redirect(response.ResponseUri.ToString());
         }
 
-    
 
         public PartialViewResult LoadForm(Guid? userID)
         {
-            userID = Guid.Parse("01181168-6215-4050-9F46-9B1DCAA1626E");
+           // userID = Guid.Parse("01181168-6215-4050-9F46-9B1DCAA1626E");  
             SPMenuModel model = new SPMenuModel();
             model.sitesRep = context.P_Mob_Get_SitesForAUser(userID);
             return PartialView("_Form", model);
@@ -181,10 +172,11 @@ namespace ReportingNew.Controllers
 
         public ActionResult Getsite(Guid? userID)
         {
+           // var user_id = (Guid)TempData["userID"];
+
             userID = Guid.Parse("01181168-6215-4050-9F46-9B1DCAA1626E");
             SPMenuModel model = new SPMenuModel();
             model.sitesRep = context.P_Mob_Get_SitesForAUser(userID);
-
             return PartialView("_Form", model);
 
 

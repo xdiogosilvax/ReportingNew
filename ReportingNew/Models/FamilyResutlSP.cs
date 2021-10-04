@@ -5,6 +5,15 @@ using System.Web;
 
 namespace ReportingNew.Models
 {
+    
+
+
+    //Each class will call a diferent  class and save all results for a list.
+    //when family SP is called its results are saved on a list, then when categories report is called, one of the parameters used
+    // is the list where the result of the SP families are stores
+    //for report names works the same way, using the result of the previous stored procedures that are stored in list.
+
+
     public class FamilyResultResponse
     {
         public List<Family> Families { get; set; }
@@ -38,7 +47,7 @@ namespace ReportingNew.Models
         public Nullable<int> ReportID { get; set; }
         public Nullable<int> categoryid { get; set; }
         public string ReportName { get; set; }
-
+        public int DateDisabled { get; set; }
 
     }
     public class Sites
@@ -46,6 +55,9 @@ namespace ReportingNew.Models
         public Nullable<int> ID { get; set; }
         public string Text { get; set; }
     }
+
+
+
 
 
 

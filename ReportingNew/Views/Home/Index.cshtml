@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Quadranet Reporting";
 }
 
 @using ReportingNew.Models;
@@ -9,7 +9,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - Quadranet Reports</title>
     @Styles.Render("~/Content/css")
 
 
@@ -153,10 +153,6 @@
                         }
                     }
 
-
-
-
-
                 </ul>
 
             }
@@ -164,7 +160,6 @@
         </ul>
       
 
-        
     </div>
 
 
@@ -175,6 +170,8 @@
 
 
     
+
+
     @Html.Action("LoadForm","Home", new ReportingNew.Models.SPMenuModel())
 
 

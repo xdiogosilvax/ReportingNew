@@ -13,8 +13,9 @@ namespace ReportingNew
     
     public partial class P_Mob_Get_ReportNames_Result
     {
-        public Nullable<int> ReportID { get; set; }
+        public int ReportID { get; set; }
         public Nullable<int> categoryid { get; set; }
         public string ReportName { get; set; }
+        public int DateDisabled { get; set; }
     }
 }

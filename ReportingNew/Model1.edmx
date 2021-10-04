@@ -86,11 +86,6 @@
           <Property Type="Int32" Name="FamilyID" Nullable="true" />
           <Property Type="String" Name="FamilyName" Nullable="true" MaxLength="50" />
         </ComplexType>
-        <ComplexType Name="P_Mob_Get_ReportNames_Result">
-          <Property Type="Int32" Name="ReportID" Nullable="true" />
-          <Property Type="Int32" Name="categoryid" Nullable="true" />
-          <Property Type="String" Name="ReportName" Nullable="true" MaxLength="50" />
-        </ComplexType>
         <ComplexType Name="P_Mob_Get_SitesForABrand_Result">
           <Property Type="Int32" Name="ID" Nullable="true" />
           <Property Type="String" Name="Text" Nullable="true" MaxLength="50" />
@@ -108,6 +103,12 @@
         </ComplexType>
         <ComplexType Name="P_Mob_GetReportURL_Result">
           <Property Type="String" Name="URL" Nullable="false" MaxLength="221" />
+        </ComplexType>
+        <ComplexType Name="P_Mob_Get_ReportNames_Result">
+          <Property Type="Int32" Name="ReportID" Nullable="false" />
+          <Property Type="Int32" Name="categoryid" Nullable="true" />
+          <Property Type="String" Name="ReportName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="DateDisabled" Nullable="false" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -147,6 +148,7 @@
                 <ScalarProperty Name="ReportID" ColumnName="ReportID" />
                 <ScalarProperty Name="categoryid" ColumnName="categoryid" />
                 <ScalarProperty Name="ReportName" ColumnName="ReportName" />
+                <ScalarProperty Name="DateDisabled" ColumnName="DateDisabled" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
