@@ -22,19 +22,23 @@ namespace ReportingNew.Controllers
 
 
 
-        public ActionResult Index(Guid? userID)
+        public ActionResult Index(Guid? ID)
         {
 
-            
+            try
+            {
+
+        
             // var user = userID;
             //var returnFamilies = context.P_Mob_Get_ReportFamilies("John");
             var model = new FamilyResultResponse();
             model.Families=new List<Family>();
             SPMenuModel modelSPMEnu = new SPMenuModel();
-            userID = Guid.Parse("01181168-6215-4050-9F46-9B1DCAA1626E");
+            Guid userID = ID.Value;
+            TempData["userID"] = ID.Value;
 
 
-         
+
 
 
             foreach (var f in context.P_Mob_Get_ReportFamilies(userID).ToList())
@@ -87,7 +91,11 @@ namespace ReportingNew.Controllers
 
 
             return View(model);
+            }
+            catch(Exception ex)
+            {
 
+            }
 
         }
 
@@ -169,11 +177,11 @@ namespace ReportingNew.Controllers
             return Redirect(response.ResponseUri.ToString());
         }
 
-    
+
 
         public PartialViewResult LoadForm(Guid? userID)
         {
-            userID = Guid.Parse("01181168-6215-4050-9F46-9B1DCAA1626E");
+            userID = Guid.Parse(TempData["userID"].ToString());
             SPMenuModel model = new SPMenuModel();
             model.sitesRep = context.P_Mob_Get_SitesForAUser(userID);
             return PartialView("_Form", model);
@@ -181,7 +189,8 @@ namespace ReportingNew.Controllers
 
         public ActionResult Getsite(Guid? userID)
         {
-            userID = Guid.Parse("01181168-6215-4050-9F46-9B1DCAA1626E");
+            userID = Guid.Parse(TempData["userID"].ToString());
+            //userID = Guid.Parse("01181168-6215-4050-9F46-9B1DCAA1626E");
             SPMenuModel model = new SPMenuModel();
             model.sitesRep = context.P_Mob_Get_SitesForAUser(userID);
 
