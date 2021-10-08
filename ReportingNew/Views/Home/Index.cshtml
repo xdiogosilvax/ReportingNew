@@ -35,50 +35,50 @@
             transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
         }
 
-            /* The sidebar links */
-            .menu_fam {
-                padding: 8px 8px 8px 32px;
-                text-decoration: none;
-                font-size: 25px;
-                color: #818181;
-                display: block;
-                transition: 0.3s;
-            }
-                      /* The sidebar links */
-            .menu_cat {
-                padding: 8px 8px 8px 32px;
-                text-decoration: none;
-                font-size: 20px;
-                color: #818181;
-                display: block;
-                transition: 0.3s;
-            }
-                      /* The sidebar links */
-            .menu_name {
-                padding: 8px 8px 8px 32px;
-                text-decoration: none;
-                font-size: 15px;
-                color: #818181;
-                display: block;
-                transition: 0.3s;
-            }
-            
+        /* The sidebar links */
+        .menu_fam {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+        /* The sidebar links */
+        .menu_cat {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+        /* The sidebar links */
+        .menu_name {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 15px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
 
 
 
-            /* When you mouse over the navigation links, change their color */
-            .sidebar a:hover {
-                color: #f1f1f1;
-            }
 
-            /* Position and style the close button (top right corner) */
-            .sidebar .closebtn {
-                position: absolute;
-                top: 0;
-                right: 25px;
-                font-size: 36px;
-                margin-left: 50px;
-            }
+        /* When you mouse over the navigation links, change their color */
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        /* Position and style the close button (top right corner) */
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
 
         /* The button used to open the sidebar */
         .openbtn {
@@ -109,6 +109,7 @@
             width: 50%;
             padding: 10px;
         }
+
         .dropdown_size {
             min-width: 250px;
         }
@@ -130,11 +131,11 @@
 
 
         <a href="#"></a>
-       
+            
         <ul>
 
 
-     
+
             @foreach (var fam in Model.Families)
             {
                 <a href="#" class="menu_fam"> @fam.FamilyName</a>
@@ -148,7 +149,8 @@
                         foreach (var name in cat.FamilCatRep)
                         {
                             <ul class="">
-                                <li class=""><a href="@Url.Action("getReport", "Home", new {reportID=@name.ReportID })" class="menu_name" id="getReport" href="">@name.ReportName  </a></li>
+                                @*<li class=""><a href="@Url.Action("getReport", "Home", new {reportid=@name.ReportID })" class="menu_name" id="getReport"    >@name.ReportName  </a></li>*@
+                                <li class=""><a href="@Url.Action("getReport", "Home" , new {repid=@name.ReportID })" class="menu_name" id="getReport"  >@name.ReportName  </a></li>
                             </ul>
                         }
                     }
@@ -162,9 +164,9 @@
             }
 
         </ul>
-      
 
-        
+
+
     </div>
 
 
@@ -174,8 +176,8 @@
     </div>
 
 
-    
-    @Html.Action("LoadForm","Home", new ReportingNew.Models.SPMenuModel())
+
+    @Html.Action("LoadForm", "Home", new ReportingNew.Models.SPMenuModel())
 
 
 
@@ -204,7 +206,7 @@
         }
 
 
-    
+
 
     </script>
 

@@ -1,52 +1,56 @@
 ﻿@using ReportingNew.Models
 
-<div class="container center">
+    <div class="container center">
 
-    @model SPMenuModel
-    <form method="POST" action="/urlT">
+        @model SPMenuModel
 
-
-        <div class="form-group">
-            <!-- Example single danger button -->
-            <label>Site</label>
-
-            <select class="form-control" name="siteN">
-                @foreach (var site in Model.sitesRep)
-                {
-                    <option>@site.SiteName</option>
-                }
+       
+            <form  action="/Home/urlJT/id/repid" method="post">
 
 
-            </select>
+                <div class="form-group">
+                    <!-- Example single danger button -->
+                    <label>Site</label>
+
+                    <select class="form-control" name="siteN">
+                        @foreach (var site in Model.sitesRep)
+                        {
+                            <option>@site.SiteName</option>
+                        }
 
 
-        </div>
+                    </select>
 
 
-        <!--  -->
-        <div class="form-group">
-            <label for="exampleFormControlTextarea1">Date From</label>
-            <input type="date" required class="form-control" name="dateFrom">
-        </div>
-        <div class="form-group">
-            <label for="exampleFormControlTextarea1">Date To</label>
-            <input type="date" required class="form-control" name="dateTo">
-        </div>
-
-        <div class="row">
-
-            <button type="submit" class="btn btn-success">Take me to the report</button>
-
-            <button type="button" class="btn btn-danger">Clear</button>
-        </div>
-
-    </form>
-    <hr />
+                </div>
 
 
+                <!--  -->
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea1">Date From</label>
+                    <input type="date" required class="form-control" name="dateFrom">
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea1">Date To</label>
+                    <input type="date" required class="form-control" name="dateTo">
+                </div>
+
+                <div class="row">
+
+                    <button type="submit" class="btn btn-success">Take me to the report</button>
+
+                    <button type="button" class="btn btn-danger">Clear</button>
+                </div>
+
+            </form>
+        
+
+        <hr />
 
 
-    <footer class="center">
-        <p>&copy; @DateTime.Now.Year - Quadranet</p>
-    </footer>
-</div>
+
+
+        <footer class="center">
+            <p>&copy; @DateTime.Now.Year - Quadranet</p>
+        </footer>
+    </div>

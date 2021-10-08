@@ -44,7 +44,7 @@ namespace ReportingNew.Models
     public class Sites
     {
         public Nullable<int> ID { get; set; }
-        public string Text { get; set; }
+        public string Text { get; set; }    
     }
 
 
