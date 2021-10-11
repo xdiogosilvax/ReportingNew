@@ -23,20 +23,10 @@ namespace ReportingNew.Controllers
         public ActionResult Index(Guid? ID)
         {
 
-
-
-            // var user = userID;
-            //var returnFamilies = context.P_Mob_Get_ReportFamilies("John");
             var model = new FamilyResultResponse();
             model.Families = new List<Family>();
             SPMenuModel modelSPMEnu = new SPMenuModel();
-            // Guid userID = ID.Value;
-            //var userID = Guid.Parse("01181168-6215-4050-9F46-9B1DCAA1626E");
-            //ID = userID;
             Session["userID"] = ID.Value;
-
-
-
 
 
             foreach (var f in context.P_Mob_Get_ReportFamilies(ID).ToList())
@@ -70,28 +60,10 @@ namespace ReportingNew.Controllers
                 model.Families.Add(fam);
 
             }
-            /*
-            var sites = new Sites();
-            foreach (var s in context.P_Mob_Get_SitesForAUser(userID).ToList())
-            {
-                sites.ID = s.SiteID;
-                sites.Text = s.SiteName;
-            }
-
-            model.SitesGet.Add(sites);
-            */
-
-            //modelSPMEnu.familyResult.SitesGet = context.P_Mob_Get_SitesForAUser(userID).ToList();
-            //ViewBag.Brand = modelSPMEnu.sitesRep;
-
 
             modelSPMEnu.familyResult = model;
 
-
             return View(model);
-
-
-
         }
 
 
@@ -101,35 +73,63 @@ namespace ReportingNew.Controllers
         {
 
 
-            TempData["RepID"] = repid;
+            Session["RepID"] = repid;
 
             var userID = Session["userID"].ToString();
 
-            //return RedirectToAction("Index/"+ userID);
-
             return RedirectToAction("Index", "Home", new { id = userID });
-            //return RedirectToRoute("Forum_subcategory", new { controller = "View", action = "ListThreads", category = "1", subcategory = "49" });
-            //return View("Index");
         }
+
+
+        public PartialViewResult LoadForm(Guid? userID)
+        {
+            userID = Guid.Parse(Session["userID"].ToString());
+            var repID = Convert.ToInt32(Session["RepID"]);
+
+            SPMenuModel model = new SPMenuModel();
+            model.sitesRep = context.P_Mob_Get_SitesForAUser(userID);
+
+
+            model.reportControls = context.P_Mob_Get_ReportControls(repID);
+            return PartialView("_Form", model);
+        }
+
+
+
 
         [Route("Home/urlJT/id/repid")]
         public ActionResult urlJT(string user_id)
-        {
+            {
             SPMenuModel model = new SPMenuModel();
-            //user_id = Guid.Parse("01181168-6215-4050-9F46-9B1DCAA1626E");
             user_id = Session["userID"].ToString();
             var keys = Request.Form.AllKeys;
+
+            var dateFrom = "0";
+            var dateTo = "0";
             var userID = Guid.Parse(user_id);
             var site = Request.Form.Get(keys[0]);
-            var dateFrom = Request.Form.Get(keys[1]);
-            var dateTo = Request.Form.Get(keys[2]);
+            if (Convert.ToInt32( keys.Length) <= 1)
+            {
+             dateFrom=null;
+             dateTo= null;
+            }
+          else
+            {
+                var dates = Request.Form.Get(keys[1]).ToString();
+
+                string[] split = dates.Split(',');
+
+                dateFrom = split[0];
+                dateTo = split[1];
+                
+
+            }
+
             var urlFromSP = "0";
-            var repID = Convert.ToInt32(TempData["RepID"]);
-
-
-
+            var repID = Convert.ToInt32(Session["RepID"]);
             var brand = 0;
             var siteID = 0;
+
             P_Mob_GetReportURL_Result test = new P_Mob_GetReportURL_Result();
             ObjectResult<P_Mob_Get_SitesForAUser_Result> objectResult_sites = context.P_Mob_Get_SitesForAUser(userID);
 
@@ -175,33 +175,5 @@ namespace ReportingNew.Controllers
 
             return Redirect(urlFromSP);
         }
-
-
-
-        public PartialViewResult LoadForm(Guid? userID)
-        {
-            userID = Guid.Parse(Session["userID"].ToString());
-            SPMenuModel model = new SPMenuModel();
-            model.sitesRep = context.P_Mob_Get_SitesForAUser(userID);
-            return PartialView("_Form", model);
-        }
-
-
-
-
-
-        public ActionResult Getsite(Guid? userID)
-        {
-            userID = Guid.Parse(TempData["userID"].ToString());
-            //userID = Guid.Parse("01181168-6215-4050-9F46-9B1DCAA1626E");
-            SPMenuModel model = new SPMenuModel();
-            model.sitesRep = context.P_Mob_Get_SitesForAUser(userID);
-
-            return PartialView("_Form", model);
-
-
-        }
-
-
     }
 }

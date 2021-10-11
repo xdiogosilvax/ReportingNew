@@ -9,7 +9,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - DBX Reports</title>
     @Styles.Render("~/Content/css")
 
 
@@ -110,6 +110,13 @@
             padding: 10px;
         }
 
+
+        .center_title {
+            margin: auto;
+            width: 60%;
+            padding: 10px;
+        }
+
         .dropdown_size {
             min-width: 250px;
         }
@@ -119,7 +126,7 @@
     <div class="navbar navbar-inverse navbar-fixed-top ">
         <div class="container">
             <div class="navbar-header left">
-                <img src="../img/QuadLogoWhite.png" class="img-responsive" width=30%>
+                <img src="~/Content/img/QuadLogoWhite.png" class="img-responsive" width=30%>
 
             </div>
         </div>
@@ -131,7 +138,7 @@
 
 
         <a href="#"></a>
-            
+
         <ul>
 
 
@@ -150,7 +157,7 @@
                         {
                             <ul class="">
                                 @*<li class=""><a href="@Url.Action("getReport", "Home", new {reportid=@name.ReportID })" class="menu_name" id="getReport"    >@name.ReportName  </a></li>*@
-                                <li class=""><a href="@Url.Action("getReport", "Home" , new {repid=@name.ReportID })" class="menu_name" id="getReport"  >@name.ReportName  </a></li>
+                                <li class=""><a href="@Url.Action("getReport", "Home", new { repid = @name.ReportID })" class="menu_name" id="getReport">@name.ReportName  </a></li>
                             </ul>
                         }
                     }
@@ -165,8 +172,6 @@
 
         </ul>
 
-
-
     </div>
 
 
@@ -177,7 +182,22 @@
 
 
 
-    @Html.Action("LoadForm", "Home", new ReportingNew.Models.SPMenuModel())
+    @if (Session["RepID"] == null)
+    {
+        <div class="">
+            <h1 style="text-align:center">Welcome</h1>
+            <p style="text-align:center">Please choose a report</p>
+            <footer style="text-align:center">
+                <p>&copy; @DateTime.Now.Year - Quadranet</p>
+            </footer>
+
+        </div>
+    }
+    else
+    {
+
+        @Html.Action("LoadForm", "Home", new ReportingNew.Models.SPMenuModel())
+    }
 
 
 

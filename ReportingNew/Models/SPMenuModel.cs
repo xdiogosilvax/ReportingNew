@@ -15,6 +15,7 @@ namespace ReportingNew.Models
 
         public IEnumerable<P_Mob_Get_SitesForAUser_Result> sitesRep { get; set; }
         public IEnumerable<P_Mob_GetReportURL_Result> reportURL { get; set; }
+        public IEnumerable<P_Mob_Get_ReportControls_Result> reportControls { get; set; }
 
 
     }

@@ -12,6 +12,9 @@
           <Parameter Name="UserGUID" Type="uniqueidentifier" Mode="In" />
           <Parameter Name="Familyid" Type="int" Mode="In" />
         </Function>
+        <Function Name="P_Mob_Get_ReportControls" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="reportid" Type="int" Mode="In" />
+        </Function>
         <Function Name="P_Mob_Get_ReportFamilies" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserGUID" Type="uniqueidentifier" Mode="In" />
         </Function>
@@ -19,6 +22,9 @@
           <Parameter Name="UserGUID" Type="uniqueidentifier" Mode="In" />
           <Parameter Name="Familyid" Type="int" Mode="In" />
           <Parameter Name="CategoryID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="P_Mob_Get_ReportParameters" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="reportid" Type="int" Mode="In" />
         </Function>
         <Function Name="P_Mob_Get_SitesForABrand" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="username" Type="nvarchar" Mode="In" />
@@ -77,6 +83,12 @@
             <Parameter Name="dateto" Mode="In" Type="String" />
             <Parameter Name="userguid" Mode="In" Type="Guid" />
           </FunctionImport>
+          <FunctionImport Name="P_Mob_Get_ReportControls" ReturnType="Collection(WarehouseModel.P_Mob_Get_ReportControls_Result)">
+            <Parameter Name="reportid" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="P_Mob_Get_ReportParameters" ReturnType="Collection(String)">
+            <Parameter Name="reportid" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="P_Mob_Get_BrandsForUser_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
@@ -108,6 +120,13 @@
         </ComplexType>
         <ComplexType Name="P_Mob_GetReportURL_Result">
           <Property Type="String" Name="URL" Nullable="false" MaxLength="221" />
+        </ComplexType>
+        <ComplexType Name="P_Mob_Get_ReportControls_Result">
+          <Property Type="Int32" Name="ReportID" Nullable="true" />
+          <Property Type="String" Name="Parameter" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="ControlParameter" Nullable="true" />
+          <Property Type="String" Name="ControlType" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="LabelText" Nullable="true" MaxLength="50" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -174,6 +193,18 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="P_Mob_Get_ReportControls" FunctionName="WarehouseModel.Store.P_Mob_Get_ReportControls">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.P_Mob_Get_ReportControls_Result">
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+                <ScalarProperty Name="Parameter" ColumnName="Parameter" />
+                <ScalarProperty Name="ControlParameter" ColumnName="ControlParameter" />
+                <ScalarProperty Name="ControlType" ColumnName="ControlType" />
+                <ScalarProperty Name="LabelText" ColumnName="LabelText" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="P_Mob_Get_ReportParameters" FunctionName="WarehouseModel.Store.P_Mob_Get_ReportParameters" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
