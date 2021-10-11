@@ -77,6 +77,19 @@ namespace ReportingNew.Controllers
 
             var userID = Session["userID"].ToString();
 
+
+
+            var context = new WarehouseEntities();
+
+            var query = (from t
+                        in context.Rep_Report_Names
+                        where t.ReportID == repid
+                        select new { t.ReportName}).Single();
+
+            var repName = query.ReportName;
+
+            Session["RepName"] = repName;
+         
             return RedirectToAction("Index", "Home", new { id = userID });
         }
 

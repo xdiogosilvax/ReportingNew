@@ -4,7 +4,20 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="WarehouseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="WarehouseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Warehouse.dbo.Rep_Report_Names' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Rep_Report_Names">
+          <Key>
+            <PropertyRef Name="ReportID" />
+          </Key>
+          <Property Name="ReportID" Type="int" Nullable="false" />
+          <Property Name="ReportName" Type="nvarchar" MaxLength="50" />
+          <Property Name="CategoryID" Type="int" />
+          <Property Name="ReportURL" Type="nvarchar(max)" />
+          <Property Name="Format" Type="nvarchar" MaxLength="50" />
+          <Property Name="DateDisabled" Type="bit" />
+        </EntityType>
         <Function Name="P_Mob_Get_BrandsForUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="username" Type="nvarchar" Mode="In" />
         </Function>
@@ -41,7 +54,18 @@
           <Parameter Name="dateto" Type="varchar" Mode="In" />
           <Parameter Name="userguid" Type="uniqueidentifier" Mode="In" />
         </Function>
-        <EntityContainer Name="WarehouseModelStoreContainer" />
+        <EntityContainer Name="WarehouseModelStoreContainer">
+          <EntitySet Name="Rep_Report_Names" EntityType="Self.Rep_Report_Names" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[Rep_Report_Names].[ReportID] AS [ReportID], 
+[Rep_Report_Names].[ReportName] AS [ReportName], 
+[Rep_Report_Names].[CategoryID] AS [CategoryID], 
+[Rep_Report_Names].[ReportURL] AS [ReportURL], 
+[Rep_Report_Names].[Format] AS [Format], 
+[Rep_Report_Names].[DateDisabled] AS [DateDisabled]
+FROM [dbo].[Rep_Report_Names] AS [Rep_Report_Names]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -84,11 +108,12 @@
             <Parameter Name="userguid" Mode="In" Type="Guid" />
           </FunctionImport>
           <FunctionImport Name="P_Mob_Get_ReportControls" ReturnType="Collection(WarehouseModel.P_Mob_Get_ReportControls_Result)">
-            <Parameter Name="reportid" Mode="In" Type="Int32" />
+          <Parameter Name="reportid" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="P_Mob_Get_ReportParameters" ReturnType="Collection(String)">
-            <Parameter Name="reportid" Mode="In" Type="Int32" />
+          <Parameter Name="reportid" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="Rep_Report_Names" EntityType="WarehouseModel.Rep_Report_Names" />
         </EntityContainer>
         <ComplexType Name="P_Mob_Get_BrandsForUser_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
@@ -128,6 +153,17 @@
           <Property Type="String" Name="ControlType" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="LabelText" Nullable="true" MaxLength="50" />
         </ComplexType>
+        <EntityType Name="Rep_Report_Names">
+          <Key>
+            <PropertyRef Name="ReportID" />
+          </Key>
+          <Property Name="ReportID" Type="Int32" Nullable="false" />
+          <Property Name="ReportName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryID" Type="Int32" />
+          <Property Name="ReportURL" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Format" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DateDisabled" Type="Boolean" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -205,6 +241,18 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="P_Mob_Get_ReportParameters" FunctionName="WarehouseModel.Store.P_Mob_Get_ReportParameters" />
+          <EntitySetMapping Name="Rep_Report_Names">
+            <EntityTypeMapping TypeName="WarehouseModel.Rep_Report_Names">
+              <MappingFragment StoreEntitySet="Rep_Report_Names">
+                <ScalarProperty Name="DateDisabled" ColumnName="DateDisabled" />
+                <ScalarProperty Name="Format" ColumnName="Format" />
+                <ScalarProperty Name="ReportURL" ColumnName="ReportURL" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="ReportName" ColumnName="ReportName" />
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
