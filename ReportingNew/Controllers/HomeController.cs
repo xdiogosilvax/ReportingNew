@@ -19,17 +19,17 @@ namespace ReportingNew.Controllers
         WarehouseEntities context = new WarehouseEntities();
 
 
-        [Route("{Home}/{Index}/{id?}")]
-        public ActionResult Index(Guid? ID)
+       // [Route("{Home}/{Index}/{userGuid}")]
+        public ActionResult Index(Guid? userGuid)
         {
 
             var model = new FamilyResultResponse();
             model.Families = new List<Family>();
             SPMenuModel modelSPMEnu = new SPMenuModel();
-            Session["userID"] = ID.Value;
+            Session["userID"] = userGuid.Value;
 
 
-            foreach (var f in context.P_Mob_Get_ReportFamilies(ID).ToList())
+            foreach (var f in context.P_Mob_Get_ReportFamilies(userGuid).ToList())
             {
                 var fam = new Family();
                 fam.FamilyID = f.FamilyID;
@@ -37,7 +37,7 @@ namespace ReportingNew.Controllers
                 fam.FamilyCat = new List<FamilyResultCat>();
 
                 Console.WriteLine(f.FamilyName);
-                foreach (var c in context.P_Mob_Get_ReportCategories(ID, f.FamilyID).ToList())
+                foreach (var c in context.P_Mob_Get_ReportCategories(userGuid, f.FamilyID).ToList())
                 {
                     var famcat = new FamilyResultCat();
                     famcat.CategoryID = c.CategoryID;
@@ -46,7 +46,7 @@ namespace ReportingNew.Controllers
                     famcat.FamilCatRep = new List<FamilyResulReportByCategory>();
 
                     Console.WriteLine(c.Category);
-                    foreach (var n in context.P_Mob_Get_ReportNames(ID, f.FamilyID, c.CategoryID).ToList())
+                    foreach (var n in context.P_Mob_Get_ReportNames(userGuid, f.FamilyID, c.CategoryID).ToList())
                     {
                         var famcatrep = new FamilyResulReportByCategory();
                         famcatrep.ReportID = n.ReportID;
@@ -90,17 +90,17 @@ namespace ReportingNew.Controllers
 
             Session["RepName"] = repName;
          
-            return RedirectToAction("Index", "Home", new { id = userID });
+            return RedirectToAction("Index", "Home", new { userguid = userID });
         }
 
 
-        public PartialViewResult LoadForm(Guid? userID)
+        public PartialViewResult LoadForm(Guid? userGuid)
         {
-            userID = Guid.Parse(Session["userID"].ToString());
+            userGuid = Guid.Parse(Session["userID"].ToString());
             var repID = Convert.ToInt32(Session["RepID"]);
 
             SPMenuModel model = new SPMenuModel();
-            model.sitesRep = context.P_Mob_Get_SitesForAUser(userID);
+            model.sitesRep = context.P_Mob_Get_SitesForAUser(userGuid);
 
 
             model.reportControls = context.P_Mob_Get_ReportControls(repID);
@@ -110,16 +110,16 @@ namespace ReportingNew.Controllers
 
 
 
-        [Route("Home/urlJT/id/repid")]
-        public ActionResult urlJT(string user_id)
+        //[Route("Home/urlJT/userGuid/repid")]
+        public ActionResult urlJT(string userGuid)
             {
             SPMenuModel model = new SPMenuModel();
-            user_id = Session["userID"].ToString();
+            userGuid = Session["userID"].ToString();
             var keys = Request.Form.AllKeys;
 
             var dateFrom = "0";
             var dateTo = "0";
-            var userID = Guid.Parse(user_id);
+            var userID = Guid.Parse(userGuid);
             var site = Request.Form.Get(keys[0]);
             if (Convert.ToInt32( keys.Length) <= 1)
             {
@@ -135,7 +135,6 @@ namespace ReportingNew.Controllers
                 dateFrom = split[0];
                 dateTo = split[1];
                 
-
             }
 
             var urlFromSP = "0";
@@ -181,8 +180,6 @@ namespace ReportingNew.Controllers
          );
 
 
-
-
             request.Credentials = cache;
             var response = (HttpWebResponse)request.GetResponse();
 
@@ -190,3 +187,13 @@ namespace ReportingNew.Controllers
         }
     }
 }
+
+
+
+
+
+
+
+
+
+

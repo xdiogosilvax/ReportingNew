@@ -35,7 +35,7 @@
                     @foreach (var t in Model.reportControls)
                     {
                         <label for="exampleFormControlTextarea1">@t.LabelText</label>
-                        <input type="@t.ControlType" class="form-control" name="dateFrom">
+                        <input type="@t.ControlType" class="form-control" required name="dateFrom">
                         <br />
                     }
 

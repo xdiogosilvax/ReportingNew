@@ -15,10 +15,10 @@ namespace ReportingNew
             routes.MapMvcAttributeRoutes();
             routes.MapRoute(
                 name: "Default",
-                url: "{controller}/{action}/{id}/{repid}",
+                url: "{controller}/{action}/{userGuid}/{repid}",
                 defaults: new { controller = "Home", 
                     action = "Index",
-                    id = UrlParameter.Optional, 
+                    userGuid = UrlParameter.Optional, 
                     repid=UrlParameter.Optional  }
             );
         }
