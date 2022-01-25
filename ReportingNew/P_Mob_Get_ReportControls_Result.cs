@@ -18,5 +18,7 @@ namespace ReportingNew
         public Nullable<int> ControlParameter { get; set; }
         public string ControlType { get; set; }
         public string LabelText { get; set; }
+        public bool Visible { get; set; }
+        public string DefaultDate { get; set; }
     }
 }

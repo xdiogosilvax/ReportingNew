@@ -129,15 +129,6 @@ namespace ReportingNew
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<P_Mob_GetReportURL_Result>("P_Mob_GetReportURL", reportidParameter, brandidParameter, siteidParameter, datefromParameter, datetoParameter, userguidParameter);
         }
     
-        public virtual ObjectResult<P_Mob_Get_ReportControls_Result> P_Mob_Get_ReportControls(Nullable<int> reportid)
-        {
-            var reportidParameter = reportid.HasValue ?
-                new ObjectParameter("reportid", reportid) :
-                new ObjectParameter("reportid", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<P_Mob_Get_ReportControls_Result>("P_Mob_Get_ReportControls", reportidParameter);
-        }
-    
         public virtual ObjectResult<string> P_Mob_Get_ReportParameters(Nullable<int> reportid)
         {
             var reportidParameter = reportid.HasValue ?
@@ -145,6 +136,15 @@ namespace ReportingNew
                 new ObjectParameter("reportid", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("P_Mob_Get_ReportParameters", reportidParameter);
+        }
+    
+        public virtual ObjectResult<P_Mob_Get_ReportControls_Result> P_Mob_Get_ReportControls(Nullable<int> reportid)
+        {
+            var reportidParameter = reportid.HasValue ?
+                new ObjectParameter("reportid", reportid) :
+                new ObjectParameter("reportid", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<P_Mob_Get_ReportControls_Result>("P_Mob_Get_ReportControls", reportidParameter);
         }
     }
 }

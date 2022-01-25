@@ -60,7 +60,7 @@ namespace ReportingNew.Controllers
                 model.Families.Add(fam);
 
             }
-
+                
             modelSPMEnu.familyResult = model;
 
             return View(model);
@@ -97,7 +97,7 @@ namespace ReportingNew.Controllers
         public PartialViewResult LoadForm(Guid? userGuid)
         {
             userGuid = Guid.Parse(Session["userID"].ToString());
-            var repID = Convert.ToInt32(Session["RepID"]);
+            int repID = Convert.ToInt32(Session["RepID"]);
 
             SPMenuModel model = new SPMenuModel();
             model.sitesRep = context.P_Mob_Get_SitesForAUser(userGuid);
@@ -127,15 +127,15 @@ namespace ReportingNew.Controllers
              dateTo= null;
             }
           else
-            {
-                var dates = Request.Form.Get(keys[1]).ToString();
+          {
+            var dates = Request.Form.Get(keys[1]).ToString();
 
-                string[] split = dates.Split(',');
+            string[] split = dates.Split(',');
 
-                dateFrom = split[0];
-                dateTo = split[1];
+            dateFrom = split[0];
+            dateTo = split[1];
                 
-            }
+          }
 
             var urlFromSP = "0";
             var repID = Convert.ToInt32(Session["RepID"]);
@@ -156,7 +156,7 @@ namespace ReportingNew.Controllers
 
             ObjectResult<P_Mob_GetReportURL_Result> objectResultURL = context.P_Mob_GetReportURL(repID, brand, siteID, dateFrom, dateTo, userID);
 
-
+            
             foreach (var reportURL_Result in objectResultURL.AsEnumerable())
             {
                 urlFromSP = reportURL_Result.URL.ToString();

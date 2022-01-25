@@ -34,9 +34,25 @@
 
                     @foreach (var t in Model.reportControls)
                     {
-                        <label for="exampleFormControlTextarea1">@t.LabelText</label>
-                        <input type="@t.ControlType" class="form-control" required name="dateFrom">
-                        <br />
+                        if (t.Visible == false)
+                        {
+                            <label hidden for="exampleFormControlTextarea1">@t.LabelText</label>
+                            <input type="@t.ControlType" id="id_pic_1" class="form-control" value="@t.DefaultDate" required name="dateFrom">
+                            <br />
+                            <style>
+                                #id_pic_1 {
+                                    display:none;
+                                }
+                            </style>
+
+                        }
+                        if (t.Visible == true)
+                        {
+                            <label for="exampleFormControlTextarea1">@t.LabelText</label>
+                            <input type="@t.ControlType" class="form-control" value="@t.DefaultDate" required name="dateFrom">
+                            <br />
+                        }
+
                     }
 
 

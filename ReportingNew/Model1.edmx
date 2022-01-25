@@ -107,13 +107,13 @@ FROM [dbo].[Rep_Report_Names] AS [Rep_Report_Names]</DefiningQuery>
             <Parameter Name="dateto" Mode="In" Type="String" />
             <Parameter Name="userguid" Mode="In" Type="Guid" />
           </FunctionImport>
-          <FunctionImport Name="P_Mob_Get_ReportControls" ReturnType="Collection(WarehouseModel.P_Mob_Get_ReportControls_Result)">
-          <Parameter Name="reportid" Mode="In" Type="Int32" />
-          </FunctionImport>
           <FunctionImport Name="P_Mob_Get_ReportParameters" ReturnType="Collection(String)">
           <Parameter Name="reportid" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="Rep_Report_Names" EntityType="WarehouseModel.Rep_Report_Names" />
+          <FunctionImport Name="P_Mob_Get_ReportControls" ReturnType="Collection(WarehouseModel.P_Mob_Get_ReportControls_Result)">
+            <Parameter Name="reportid" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="P_Mob_Get_BrandsForUser_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
@@ -146,13 +146,6 @@ FROM [dbo].[Rep_Report_Names] AS [Rep_Report_Names]</DefiningQuery>
         <ComplexType Name="P_Mob_GetReportURL_Result">
           <Property Type="String" Name="URL" Nullable="false" MaxLength="221" />
         </ComplexType>
-        <ComplexType Name="P_Mob_Get_ReportControls_Result">
-          <Property Type="Int32" Name="ReportID" Nullable="true" />
-          <Property Type="String" Name="Parameter" Nullable="true" MaxLength="50" />
-          <Property Type="Int32" Name="ControlParameter" Nullable="true" />
-          <Property Type="String" Name="ControlType" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="LabelText" Nullable="true" MaxLength="50" />
-        </ComplexType>
         <EntityType Name="Rep_Report_Names">
           <Key>
             <PropertyRef Name="ReportID" />
@@ -164,6 +157,15 @@ FROM [dbo].[Rep_Report_Names] AS [Rep_Report_Names]</DefiningQuery>
           <Property Name="Format" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DateDisabled" Type="Boolean" />
         </EntityType>
+        <ComplexType Name="P_Mob_Get_ReportControls_Result">
+          <Property Type="Int32" Name="ReportID" Nullable="true" />
+          <Property Type="String" Name="Parameter" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="ControlParameter" Nullable="true" />
+          <Property Type="String" Name="ControlType" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="LabelText" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="Visible" Nullable="false" />
+          <Property Type="String" Name="DefaultDate" Nullable="true" MaxLength="20" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -229,17 +231,6 @@ FROM [dbo].[Rep_Report_Names] AS [Rep_Report_Names]</DefiningQuery>
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="P_Mob_Get_ReportControls" FunctionName="WarehouseModel.Store.P_Mob_Get_ReportControls">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="WarehouseModel.P_Mob_Get_ReportControls_Result">
-                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
-                <ScalarProperty Name="Parameter" ColumnName="Parameter" />
-                <ScalarProperty Name="ControlParameter" ColumnName="ControlParameter" />
-                <ScalarProperty Name="ControlType" ColumnName="ControlType" />
-                <ScalarProperty Name="LabelText" ColumnName="LabelText" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="P_Mob_Get_ReportParameters" FunctionName="WarehouseModel.Store.P_Mob_Get_ReportParameters" />
           <EntitySetMapping Name="Rep_Report_Names">
             <EntityTypeMapping TypeName="WarehouseModel.Rep_Report_Names">
@@ -253,6 +244,19 @@ FROM [dbo].[Rep_Report_Names] AS [Rep_Report_Names]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="P_Mob_Get_ReportControls" FunctionName="WarehouseModel.Store.P_Mob_Get_ReportControls">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.P_Mob_Get_ReportControls_Result">
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+                <ScalarProperty Name="Parameter" ColumnName="Parameter" />
+                <ScalarProperty Name="ControlParameter" ColumnName="ControlParameter" />
+                <ScalarProperty Name="ControlType" ColumnName="ControlType" />
+                <ScalarProperty Name="LabelText" ColumnName="LabelText" />
+                <ScalarProperty Name="Visible" ColumnName="Visible" />
+                <ScalarProperty Name="DefaultDate" ColumnName="DefaultDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
