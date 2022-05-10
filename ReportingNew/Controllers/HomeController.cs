@@ -1,4 +1,6 @@
 ﻿using ReportingNew.Models;
+using RestSharp;
+using RestSharp.Authenticators;
 using System;
 using System.Collections.Generic;
 using System.Data.Objects;
@@ -19,7 +21,7 @@ namespace ReportingNew.Controllers
         WarehouseEntities context = new WarehouseEntities();
 
 
-       // [Route("{Home}/{Index}/{userGuid}")]
+        [Route("{Home}/{Index}/{userGuid}")]
         public ActionResult Index(Guid? userGuid)
         {
 
@@ -72,15 +74,9 @@ namespace ReportingNew.Controllers
         public ActionResult getReport(int? repid)
         {
 
-
             Session["RepID"] = repid;
-
             var userID = Session["userID"].ToString();
-
-
-
-            var context = new WarehouseEntities();
-
+            var dc = new WarehouseEntities();
             var query = (from t
                         in context.Rep_Report_Names
                         where t.ReportID == repid
@@ -102,17 +98,17 @@ namespace ReportingNew.Controllers
             SPMenuModel model = new SPMenuModel();
             model.sitesRep = context.P_Mob_Get_SitesForAUser(userGuid);
 
-
-            model.reportControls = context.P_Mob_Get_ReportControls(repID);
+             
+           // model.reportControls = context.P_Mob_Get_ReportControls(repID);
+            var paramenterRecords = context.P_Mob_Get_ReportControls(repID);
+            model.reportControls=paramenterRecords;
+            
             return PartialView("_Form", model);
         }
 
-
-
-
-        //[Route("Home/urlJT/userGuid/repid")]
+        //[Route("Home/urlJT/userGuid/repid")] 
         public ActionResult urlJT(string userGuid)
-            {
+        {
             SPMenuModel model = new SPMenuModel();
             userGuid = Session["userID"].ToString();
             var keys = Request.Form.AllKeys;
@@ -156,35 +152,54 @@ namespace ReportingNew.Controllers
 
             ObjectResult<P_Mob_GetReportURL_Result> objectResultURL = context.P_Mob_GetReportURL(repID, brand, siteID, dateFrom, dateTo, userID);
 
-            
             foreach (var reportURL_Result in objectResultURL.AsEnumerable())
             {
                 urlFromSP = reportURL_Result.URL.ToString();
             }
-
-            var request = (HttpWebRequest)WebRequest.Create(urlFromSP);
-
-            request.Method = "GET";
-            request.UseDefaultCredentials = false;
-            request.PreAuthenticate = true;
-
-            var cred = new NetworkCredential("Quadranet\\Qnreporting", "QuadraN3t!1");
-            var cache = new CredentialCache();
-            cache.Add(new Uri(urlFromSP), "Basic", cred);
-
-
-            ServicePointManager.ServerCertificateValidationCallback = new
-         RemoteCertificateValidationCallback
-         (
-            delegate { return true; }
-         );
+            var username = "Qnreporting";
+            var password = "QuadraN3t!1";
+            var client = new RestClient(urlFromSP);
+            
+            client.Timeout = -1;
+            var request = new RestRequest(Method.POST);
+            request.UseDefaultCredentials = true;
+            //request.AddCookie("", "");
+            client.Authenticator = new HttpBasicAuthenticator(username,password);
+            client.PreAuthenticate = true;
+            IRestResponse response = client.Execute(request);
 
 
-            request.Credentials = cache;
-            var response = (HttpWebResponse)request.GetResponse();
+            string svcCredentials = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(username + ":" + password));
 
-            return Redirect(urlFromSP);
+      //  request.AddHeader("Authorization", "Basic " + svcCredentials);
+
+
+           // response.ResponseUri
+
+
+            return Redirect(response.ResponseUri.ToString());
         }
+
+
+
+
+        public ActionResult ReportTemplate(string ReportName, string ReportDescription, int Width, int Height)
+        {
+            var rptInfo = new ReportInfo
+            {
+                ReportName = ReportName,
+                ReportDescription = ReportDescription,
+                ReportURL = String.Format("../../../Reports/ReportTemplate.aspx?ReportName={0}&Height={1}", ReportName, Height),
+
+                Width = Width,
+                Height = Height
+            };
+
+            return PartialView("ReportTemplate",rptInfo);
+        }
+        
+
+
     }
 }
 

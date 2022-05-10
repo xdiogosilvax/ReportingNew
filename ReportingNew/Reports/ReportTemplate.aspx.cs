@@ -1,0 +1,82 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using Microsoft.Reporting.WebForms;
+using System.Security.Principal;
+
+namespace ReportingNew.Reports
+{
+    public partial class ReportTemplate : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                try
+                {
+                    String reportFolder = System.Configuration.ConfigurationManager.AppSettings["SSRSReportsFolder"].ToString();
+
+                    
+                    rvSiteMapping.Height = Unit.Pixel(Convert.ToInt32(Request["Height"]) - 58);
+                    rvSiteMapping.ProcessingMode = Microsoft.Reporting.WebForms.ProcessingMode.Remote;
+                    rvSiteMapping.ServerReport.ReportServerUrl = new Uri("http://qsl-rep-srv01/ReportServer"); // Add the Reporting Server URL
+                    rvSiteMapping.ServerReport.ReportPath = String.Format("/{0}/{1}", reportFolder, Request["ReportName"].ToString());
+                    IReportServerCredentials irsc = new CustomReportCredentials("Qnreporting", "QuadraN3t!1", "quadranet");
+                    rvSiteMapping.ServerReport.ReportServerCredentials =irsc;
+                    rvSiteMapping.ServerReport.Refresh();
+                    
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+        }
+    }
+    
+
+    public class CustomReportCredentials : IReportServerCredentials
+    {
+
+        // local variable for network credential
+        private string _UserName;
+        private string _PassWord;
+        private string _DomainName;
+        public CustomReportCredentials(string UserName, string PassWord, string DomainName)
+        {
+            _UserName = UserName;
+            _PassWord = PassWord;
+            _DomainName = DomainName;
+        }
+        public WindowsIdentity ImpersonationUser
+        {
+            get
+            {
+                return null; // not use ImpersonationUser
+            }
+        }
+        public ICredentials NetworkCredentials
+        {
+            get
+            {
+
+                // use NetworkCredentials
+                return new NetworkCredential(_UserName, _PassWord, _DomainName);
+            }
+        }
+        public bool GetFormsCredentials(out Cookie authCookie, out string user, out string password, out string authority)
+        {
+
+            // not use FormsCredentials unless you have implements a custom autentication.
+            authCookie = null;
+            user = password = authority = null;
+            return false;
+        }
+
+    }
+
+}
