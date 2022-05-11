@@ -9,6 +9,8 @@ namespace ReportingNew.Models
     {
         public List<Family> Families { get; set; }
         public List<Sites> SitesGet { get; set; }
+        public bool ShowReports { get; set; }
+
     }
 
     public class Family

@@ -141,8 +141,6 @@
 
         <ul>
 
-
-
             @foreach (var fam in Model.Families)
             {
                 <a href="#" class="menu_fam"> @fam.FamilyName</a>
@@ -178,24 +176,25 @@
 
     @if (Session["RepID"] == null)
     {
-<div class="">
-    <h1 style="text-align:center">Welcome</h1>
-    <p style="text-align:center">Please choose a report</p>
-    <a id="ReportUrl_Test" href="@Url.Action("ReportTemplate", "Home", new { ReportName = "Arrivals", ReportDescription = "Arrivals Report", Width = 100, Height = 650 })">
-        Performance Report
-    </a>
-    <footer style="text-align:center">
-        <p>&copy; @DateTime.Now.Year - Quadranet</p>
-    </footer>
+        <div class="">
+            <h1 style="text-align:center">Welcome</h1>
+            <p style="text-align:center">Please choose a report</p>
+            <footer style="text-align:center">
+                <p>&copy; @DateTime.Now.Year - Quadranet</p>
+            </footer>
 
-</div>
+        </div>
     }
-    else
+    else if (Session["RepID"] != null && (bool)Session["ShowPaginatedReport"] == false)
     {
-        
+
         @Html.Action("LoadForm", "Home", new ReportingNew.Models.SPMenuModel())
     }
-
+    else if (Session["RepID"] != null && (bool)Session["ShowPaginatedReport"] == true)
+    {
+        @Html.Action("ReportTemplateLoader", "Home", new ReportingNew.Models.ReportInfo())
+        return;
+    }
 
 
 

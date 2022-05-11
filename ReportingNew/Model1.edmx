@@ -5,13 +5,11 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="WarehouseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'Warehouse.dbo.Rep_Report_Names' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Rep_Report_Names">
           <Key>
             <PropertyRef Name="ReportID" />
           </Key>
-          <Property Name="ReportID" Type="int" Nullable="false" />
+          <Property Name="ReportID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ReportName" Type="nvarchar" MaxLength="50" />
           <Property Name="CategoryID" Type="int" />
           <Property Name="ReportURL" Type="nvarchar(max)" />
@@ -55,16 +53,7 @@ warning 6002: The table/view 'Warehouse.dbo.Rep_Report_Names' does not have a pr
           <Parameter Name="userguid" Type="uniqueidentifier" Mode="In" />
         </Function>
         <EntityContainer Name="WarehouseModelStoreContainer">
-          <EntitySet Name="Rep_Report_Names" EntityType="Self.Rep_Report_Names" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-[Rep_Report_Names].[ReportID] AS [ReportID], 
-[Rep_Report_Names].[ReportName] AS [ReportName], 
-[Rep_Report_Names].[CategoryID] AS [CategoryID], 
-[Rep_Report_Names].[ReportURL] AS [ReportURL], 
-[Rep_Report_Names].[Format] AS [Format], 
-[Rep_Report_Names].[DateDisabled] AS [DateDisabled]
-FROM [dbo].[Rep_Report_Names] AS [Rep_Report_Names]</DefiningQuery>
-          </EntitySet>
+          <EntitySet Name="Rep_Report_Names" EntityType="Self.Rep_Report_Names" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -112,7 +101,7 @@ FROM [dbo].[Rep_Report_Names] AS [Rep_Report_Names]</DefiningQuery>
           </FunctionImport>
           <EntitySet Name="Rep_Report_Names" EntityType="WarehouseModel.Rep_Report_Names" />
           <FunctionImport Name="P_Mob_Get_ReportControls" ReturnType="Collection(WarehouseModel.P_Mob_Get_ReportControls_Result)">
-            <Parameter Name="reportid" Mode="In" Type="Int32" />
+          <Parameter Name="reportid" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="P_Mob_Get_BrandsForUser_Result">

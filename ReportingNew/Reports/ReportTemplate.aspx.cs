@@ -20,19 +20,29 @@ namespace ReportingNew.Reports
                 {
                     String reportFolder = System.Configuration.ConfigurationManager.AppSettings["SSRSReportsFolder"].ToString();
 
-                    
-                    rvSiteMapping.Height = Unit.Pixel(Convert.ToInt32(Request["Height"]) - 58);
+
+                    rvSiteMapping.Height = Unit.Pixel(800);/*(Convert.ToInt32(Request["Height"]));*/
                     rvSiteMapping.ProcessingMode = Microsoft.Reporting.WebForms.ProcessingMode.Remote;
                     rvSiteMapping.ServerReport.ReportServerUrl = new Uri("http://qsl-rep-srv01/ReportServer"); // Add the Reporting Server URL
-                    rvSiteMapping.ServerReport.ReportPath = String.Format("/{0}/{1}", reportFolder, Request["ReportName"].ToString());
+                    rvSiteMapping.ServerReport.ReportPath = String.Format("/{0}/{1}","MDX Reports", Request["ReportName"].ToString());
                     IReportServerCredentials irsc = new CustomReportCredentials("Qnreporting", "QuadraN3t!1", "quadranet");
                     rvSiteMapping.ServerReport.ReportServerCredentials =irsc;
+                    //List<ReportParameter> paramList = new List<ReportParameter>();
+
+                    //paramList.Add(new ReportParameter("datefrom", "17 Mar 2022", true));
+                    //paramList.Add(new ReportParameter("dateto", "2 Jan 2023", true));
+                    //paramList.Add(new ReportParameter("userguid", "01181168-6215-4050-9F46-9B1DCAA1626E", true));
+                    //paramList.Add(new ReportParameter("brandid", "356", true));Q
+                    //paramList.Add(new ReportParameter("siteid", "965", true));
+                    //paramList.Add(new ReportParameter("surname", "Smith", true));
+
+                    //rvSiteMapping.ServerReport.SetParameters(paramList);
                     rvSiteMapping.ServerReport.Refresh();
                     
                 }
                 catch (Exception ex)
                 {
-
+                    Console.WriteLine(ex.ToString());
                 }
             }
         }
