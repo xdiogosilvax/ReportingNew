@@ -21,8 +21,23 @@ namespace ReportingNew.Controllers
         private bool t;
         WarehouseEntities context = new WarehouseEntities();
 
-        [Route("{Home}/{Index}/{userGuid}")]
-        public ActionResult Index(Guid? userGuid, bool showrep=false)
+        private bool CheckUserGuid(Guid userGuid) 
+        {
+            string nuserGuid = userGuid.ToString();
+            var client = new RestClient("https://dbxdev.quadranet.co.uk/api/Management/ValidateSessionGUID/"+ nuserGuid);
+            client.Timeout = -1;
+            var request = new RestRequest(Method.POST);
+            IRestResponse response = client.Execute(request);
+            Console.WriteLine(response.Content);
+            if (response.Content == "true")
+                return true;
+           
+            return false;
+           
+        }
+
+        //[Route("{Home}/{Index}/{userguid}/{sessionGuid}")]    
+        public ActionResult Index(Guid? userGuid, Guid? sessionGuid, bool showrep=false)
         {
             t = showrep;
             if (t != true)
@@ -33,7 +48,7 @@ namespace ReportingNew.Controllers
             model.Families = new List<Family>();
             SPMenuModel modelSPMEnu = new SPMenuModel();
             Session["userID"] = userGuid.Value;
-
+            Session["sessionGuid"] = sessionGuid.Value;
 
             foreach (var f in context.P_Mob_Get_ReportFamilies(userGuid).ToList())
             {
@@ -72,12 +87,13 @@ namespace ReportingNew.Controllers
 
 
 
-        [Route("Home/getReport/{repid}")]
-        public ActionResult getReport(int? repid)
+        [Route("Home/getReport/{userguid}/{sessionGuid}/{repid}")]
+        public ActionResult getReport(Guid? userGuid, Guid? sessionGuid, int? repid)
         {
 
             Session["RepID"] = repid;
             var userID = Session["userID"].ToString();
+            var sessionID = Session["sessionGuid"].ToString();
             var dc = new WarehouseEntities();
             var query = (from t
                         in context.Rep_Report_Names
@@ -88,10 +104,11 @@ namespace ReportingNew.Controllers
 
             Session["RepName"] = repName;
 
-            return RedirectToAction("Index", "Home", new { userguid = userID });
+            return RedirectToAction("Index", "Home", new { userguid = userID, sessionGuid= sessionID});
         }
-        
-        public PartialViewResult LoadForm(Guid? userGuid)
+
+        [Route("Home/getReport/{userguid}/{sessionGuid}")]
+        public PartialViewResult LoadForm(Guid? userGuid, Guid? sessionGuid, int? repid)
         {
             userGuid = Guid.Parse(Session["userID"].ToString());
             int repID = Convert.ToInt32(Session["RepID"]);
@@ -106,11 +123,13 @@ namespace ReportingNew.Controllers
         }
 
 
-        //[Route("Home/urlJT/userGuid/repid")] 
+        
+        [Route("Home/urlJT/{userguid}/{sessionGuid}/{repid}")]
         public ActionResult urlJT(string userGuid)
         {
             SPMenuModel model = new SPMenuModel();
             userGuid = Session["userID"].ToString();
+            var sessionGuid= Session["sessionGuid"].ToString();
             var keys = Request.Form.AllKeys;
             var repID = Convert.ToInt32(Session["RepID"]);
             Dictionary<string, string> ParmsAndValues = new Dictionary<string, string>();
@@ -169,7 +188,7 @@ namespace ReportingNew.Controllers
                 family.ShowReports = true;
                 Session["ReportName"] = reprec.ReportName;
                 //   return RedirectToAction("ReportTemplateLoader", new { reportName = reprec.ReportName });
-                return RedirectToAction("Index", "Home", new { userguid = userID, showrep=t });
+                return RedirectToAction("Index", "Home", new { userguid = userID, sessionGuid= sessionGuid, showrep=t });
             }
         }
         //[Route("Home/ReportTemplateLoader/{reportName}")]

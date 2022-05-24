@@ -15,12 +15,40 @@ namespace ReportingNew
             routes.MapMvcAttributeRoutes();
             routes.MapRoute(
                 name: "Default",
-                url: "{controller}/{action}/{userGuid}/{repid}",
+                url: "{controller}/{action}/{userGuid}/{sessionGuid}",
                 defaults: new { controller = "Home", 
                     action = "Index",
-                    userGuid = UrlParameter.Optional, 
-                    repid=UrlParameter.Optional  }
+                    userguid = UrlParameter.Optional,
+                    sessionGuid = UrlParameter.Optional, 
+                    /*repid=UrlParameter.Optional*/  }
             );
+
+            routes.MapRoute(
+                name: "getReport",
+                url: "{controller}/{action}/{userGuid}/{sessionGuid}/{repid}",
+                defaults: new
+                {
+                    controller = "Home",
+                    action = "getReport",
+                    userguid = UrlParameter.Optional,
+                    sessionGuid = UrlParameter.Optional,
+                    repid = UrlParameter.Optional
+                }
+            );
+
+              routes.MapRoute(
+                name: "urlJT",
+                url: "{controller}/{action}/{userGuid}/{sessionGuid}/{repid}",
+                defaults: new
+                {
+                    controller = "Home",
+                    action = "urlJT",
+                    userguid = UrlParameter.Optional,
+                    sessionGuid = UrlParameter.Optional,
+                    repid = UrlParameter.Optional
+                }
+            );
+
         }
     }
 }
