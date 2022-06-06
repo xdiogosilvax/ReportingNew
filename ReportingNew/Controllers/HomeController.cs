@@ -12,12 +12,14 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Security;
 using System.Text;
+using System.Web;
 using System.Web.Mvc;
 
 namespace ReportingNew.Controllers
 {
     public class HomeController : Controller
     {
+        private string url;
         private bool t;
         WarehouseEntities context = new WarehouseEntities();
 
@@ -37,7 +39,7 @@ namespace ReportingNew.Controllers
         }
 
         //[Route("{Home}/{Index}/{userguid}/{sessionGuid}")]    
-        public ActionResult Index(Guid? userGuid, Guid? sessionGuid, bool showrep=false)
+        public ActionResult Index(Guid? userGuid, Guid? sessionGuid, int? reportId, string dbxUrl="" ,bool showrep=false)
         {
             t = showrep;
             if (t != true)
@@ -47,8 +49,17 @@ namespace ReportingNew.Controllers
             var model = new FamilyResultResponse();
             model.Families = new List<Family>();
             SPMenuModel modelSPMEnu = new SPMenuModel();
+            //if(userGuid!=null)
             Session["userID"] = userGuid.Value;
-            Session["sessionGuid"] = sessionGuid.Value;
+            if (sessionGuid != null)
+                Session["sessionGuid"] = sessionGuid.Value;
+            if (dbxUrl != null && dbxUrl != "") 
+            {
+                Session["dbxUrl"] = dbxUrl;
+                //url = dbxUrl;
+            }
+            if (reportId > 0 && reportId != null)
+                Session["RepID"] = reportId.Value;
 
             foreach (var f in context.P_Mob_Get_ReportFamilies(userGuid).ToList())
             {
@@ -87,13 +98,29 @@ namespace ReportingNew.Controllers
 
 
 
-        [Route("Home/getReport/{userguid}/{sessionGuid}/{repid}")]
-        public ActionResult getReport(Guid? userGuid, Guid? sessionGuid, int? repid)
+        [Route("Home/getReport/{userguid}/{sessionGuid}/{repid}/{dbxUrl}")]
+        public ActionResult getReport(Guid? userGuid, Guid? sessionGuid, int? repid, string dbxUrl)
         {
 
+            string userID;
+            string sessionID;
             Session["RepID"] = repid;
-            var userID = Session["userID"].ToString();
-            var sessionID = Session["sessionGuid"].ToString();
+            var reportId = Session["RepID"];
+            if (userGuid == null)
+                userID = Session["userID"].ToString();
+            else
+            { 
+                userID = userGuid.ToString();
+                Session["userID"]= userID;
+
+            }
+           // var url= HttpUtility.UrlDecode(dbxUrl);
+            Session["dbxUrl"]=url;
+            if (Session == null)
+                sessionID = Session["sessionGuid"].ToString();
+            else
+                sessionID = sessionGuid.ToString();
+
             var dc = new WarehouseEntities();
             var query = (from t
                         in context.Rep_Report_Names
@@ -104,16 +131,19 @@ namespace ReportingNew.Controllers
 
             Session["RepName"] = repName;
 
-            return RedirectToAction("Index", "Home", new { userguid = userID, sessionGuid= sessionID});
+            return RedirectToAction("Index", "Home", new { userguid = userID, sessionGuid= sessionID, reportId = reportId, dbxUrl=url});
         }
 
-        [Route("Home/getReport/{userguid}/{sessionGuid}")]
-        public PartialViewResult LoadForm(Guid? userGuid, Guid? sessionGuid, int? repid)
-        {
-            userGuid = Guid.Parse(Session["userID"].ToString());
-            int repID = Convert.ToInt32(Session["RepID"]);
 
-            SPMenuModel model = new SPMenuModel();
+    //   [Route("Home/LoadForm2/{userguid}/{sessionGuid}/{repid}/{dbxUrl}")]
+        public ActionResult LoadForm2(SPMenuModel  model)
+        {
+            var userGuid = Guid.Parse(Session["userID"].ToString());
+            int repID = Convert.ToInt32(Session["RepID"]);
+          //  Session["userID"]= userGuid.ToString();
+            //Session["sessionGuid"] = sessionGuid.ToString();
+            
+            //SPMenuModel model = new SPMenuModel();
             model.sitesRep = context.P_Mob_Get_SitesForAUser(userGuid);
 
             // model.reportControls = context.P_Mob_Get_ReportControls(repID);
@@ -124,16 +154,15 @@ namespace ReportingNew.Controllers
 
 
         
-        [Route("Home/urlJT/{userguid}/{sessionGuid}/{repid}")]
-        public ActionResult urlJT(string userGuid)
+        [Route("Home/urlJT/{userGuid}/{sessionGuid}/{repid}/{dbxUrl}")]
+        public ActionResult urlJT(string userGuid, string sessionGuid, int repid, string dbxUrl)
         {
             SPMenuModel model = new SPMenuModel();
-            userGuid = Session["userID"].ToString();
-            var sessionGuid= Session["sessionGuid"].ToString();
+           // userGuid = Session["userID"].ToString();
+           // sessionGuid= Session["sessionGuid"].ToString();
             var keys = Request.Form.AllKeys;
-            var repID = Convert.ToInt32(Session["RepID"]);
             Dictionary<string, string> ParmsAndValues = new Dictionary<string, string>();
-            var reprec = GetReportRec(repID);
+            var reprec = GetReportRec(repid);
 
             var dateFrom = "0";
             var dateTo = "0";
@@ -172,13 +201,17 @@ namespace ReportingNew.Controllers
             }
             if (reprec.Format == "1")
             {
-                ObjectResult<P_Mob_GetReportURL_Result> objectResultURL = context.P_Mob_GetReportURL(repID, brand, siteID, dateFrom, dateTo, userID);
+                ObjectResult<P_Mob_GetReportURL_Result> objectResultURL = context.P_Mob_GetReportURL(repid, brand, siteID, dateFrom, dateTo, userID);
 
                 foreach (var reportURL_Result in objectResultURL.AsEnumerable())
                 {
                     urlFromSP = reportURL_Result.URL.ToString();
                 }
-                return Redirect(urlFromSP.ToString());
+                var dbxUrlCoded =HttpUtility.UrlEncode(dbxUrl);
+                
+                var authenticatedUrl = urlFromSP + "?sessionGuid=" + sessionGuid+ "?dbx="+ dbxUrlCoded;
+
+                return Redirect(authenticatedUrl.ToString());
             }
             else
             {

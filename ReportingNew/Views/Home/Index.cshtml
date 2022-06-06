@@ -145,6 +145,8 @@
             {
                 <a href="#" class="menu_fam"> @fam.FamilyName</a>
 
+
+
                 <ul class="">
                     @foreach (var cat in fam.FamilyCat)
 
@@ -154,8 +156,7 @@
                         foreach (var name in cat.FamilCatRep)
                         {
                             <ul class="">
-                                @*<li class=""><a href="@Url.Action("getReport", "Home", new {reportid=@name.ReportID })" class="menu_name" id="getReport"    >@name.ReportName  </a></li>*@
-                                <li class=""><a href="@Url.Action("getReport", "Home", new {userguid=Session["userID"],sessionGuid= Session["sessionGuid"] ,repid = @name.ReportID })" class="menu_name" id="getReport">@name.ReportName  </a></li>
+                                <li class=""><a href="@Url.Action("getReport", "Home", new {userguid=Session["userID"],sessionGuid= Session["sessionGuid"] ,repid = @name.ReportID, dbxUrl=HttpUtility.UrlEncode(Session["dbxUrl"].ToString()) })" class="menu_name" id="getReport">@name.ReportName  </a></li>
                             </ul>
                         }
                     }
@@ -182,13 +183,13 @@
             <footer style="text-align:center">
                 <p>&copy; @DateTime.Now.Year - Quadranet</p>
             </footer>
-
         </div>
     }
     else if (Session["RepID"] != null && (bool)Session["ShowPaginatedReport"] == false)
     {
-
-        @Html.Action("LoadForm", "Home", new ReportingNew.Models.SPMenuModel())
+        @*@Html.Action("LoadForm2", "Home", new { userguid = Session["userID"], sessionGuid = Session["sessionGuid"], dbxUrl = HttpUtility.UrlEncode(Session["dbxUrl"].ToString()"]) })*@
+        @Html.Action("LoadForm2", "Home", new ReportingNew.Models.SPMenuModel())
+        @*@Html.Action("LoadForm", "Home", new {userguid= Session["userID"], sessionGuid= Session["sessionGuid"], dbxUrl= HttpUtility.UrlEncode(Session["dbxUrl"].ToString()), reportId= Session["RepID"]})*@
     }
     else if (Session["RepID"] != null && (bool)Session["ShowPaginatedReport"] == true)
     {

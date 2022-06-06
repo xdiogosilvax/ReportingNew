@@ -15,13 +15,14 @@ namespace ReportingNew
             routes.MapMvcAttributeRoutes();
             routes.MapRoute(
                 name: "Default",
-                url: "{controller}/{action}/{userGuid}/{sessionGuid}",
-                defaults: new { controller = "Home", 
+                url: "{controller}/{action}/{userGuid}/{sessionGuid}/{dbxUrl}/{reportId}",
+                defaults: new { controller = "Home",
                     action = "Index",
                     userguid = UrlParameter.Optional,
-                    sessionGuid = UrlParameter.Optional, 
-                    /*repid=UrlParameter.Optional*/  }
-            );
+                    sessionGuid = UrlParameter.Optional,
+                    dbxUrl = UrlParameter.Optional,
+                    reportId = UrlParameter.Optional }
+            );;
 
             routes.MapRoute(
                 name: "getReport",
@@ -32,20 +33,31 @@ namespace ReportingNew
                     action = "getReport",
                     userguid = UrlParameter.Optional,
                     sessionGuid = UrlParameter.Optional,
-                    repid = UrlParameter.Optional
+                    repid = UrlParameter.Optional,
+                    dbxUrl = UrlParameter.Optional
                 }
             );
-
-              routes.MapRoute(
+      //      routes.MapRoute(
+      //    name: "LoadForm",
+      //    url: "{controller}/{action}/{userGuid}/{sessionGuid}/{repid}/{dbxUrl}",
+      //    defaults: new
+      //    {
+      //        controller = "LoadForm",
+      //        action = "getReport",
+      //        userguid = UrlParameter.Optional,
+      //        sessionGuid = UrlParameter.Optional,
+      //        repid = UrlParameter.Optional,
+      //        dbxUrl= UrlParameter.Optional
+      //    }
+      //);
+            routes.MapRoute(
                 name: "urlJT",
-                url: "{controller}/{action}/{userGuid}/{sessionGuid}/{repid}",
+                url: "{controller}/{action}/{userGuid}",
                 defaults: new
                 {
                     controller = "Home",
                     action = "urlJT",
-                    userguid = UrlParameter.Optional,
-                    sessionGuid = UrlParameter.Optional,
-                    repid = UrlParameter.Optional
+                    userGuid = UrlParameter.Optional
                 }
             );
 

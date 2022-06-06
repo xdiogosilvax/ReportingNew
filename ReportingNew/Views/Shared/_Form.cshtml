@@ -5,11 +5,11 @@
         @model SPMenuModel
 
        
-            <form  action="/Home/urlJT/userguid/sessionGuid/repid" method="post">
+            <form action="/Home/urlJT/@Session["userID"]/@Session["sessionGuid"]/@Session["RepID"]/@Session["dbxUrl"]" method="post">
 
                     
 
-                <h2>@Session["RepName"].ToString()</h2>
+                <h2>@Session["RepName"]</h2>
                 <br />
 
                 <div class="form-group">
