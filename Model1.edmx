@@ -1,0 +1,272 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="WarehouseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Rep_Report_Names">
+          <Key>
+            <PropertyRef Name="ReportID" />
+          </Key>
+          <Property Name="ReportID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReportName" Type="nvarchar" MaxLength="50" />
+          <Property Name="CategoryID" Type="int" />
+          <Property Name="ReportURL" Type="nvarchar(max)" />
+          <Property Name="Format" Type="nvarchar" MaxLength="50" />
+          <Property Name="DateDisabled" Type="bit" />
+        </EntityType>
+        <Function Name="P_Mob_Get_BrandsForUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="username" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="P_Mob_Get_ReportCategories" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserGUID" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="Familyid" Type="int" Mode="In" />
+        </Function>
+        <Function Name="P_Mob_Get_ReportControls" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="reportid" Type="int" Mode="In" />
+        </Function>
+        <Function Name="P_Mob_Get_ReportFamilies" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserGUID" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="P_Mob_Get_ReportNames" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserGUID" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="Familyid" Type="int" Mode="In" />
+          <Parameter Name="CategoryID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="P_Mob_Get_ReportParameters" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="reportid" Type="int" Mode="In" />
+        </Function>
+        <Function Name="P_Mob_Get_SitesForABrand" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="username" Type="nvarchar" Mode="In" />
+          <Parameter Name="brandid" Type="int" Mode="In" />
+        </Function>
+        <Function Name="P_Mob_Get_SitesForAUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="userguid" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="P_Mob_GetReportURL" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="reportid" Type="int" Mode="In" />
+          <Parameter Name="brandid" Type="int" Mode="In" />
+          <Parameter Name="siteid" Type="int" Mode="In" />
+          <Parameter Name="datefrom" Type="varchar" Mode="In" />
+          <Parameter Name="dateto" Type="varchar" Mode="In" />
+          <Parameter Name="userguid" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <EntityContainer Name="WarehouseModelStoreContainer">
+          <EntitySet Name="Rep_Report_Names" EntityType="Self.Rep_Report_Names" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="WarehouseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <ComplexType Name="P_Mob_Get_BrandSites_Result">
+          <Property Name="BrandId" Type="Int32" />
+          <Property Name="SiteId" Type="Int32" />
+          <Property Name="SiteName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BrandName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </ComplexType>
+        <EntityContainer Name="WarehouseEntities" annotation:LazyLoadingEnabled="true">
+          <FunctionImport Name="P_Mob_Get_BrandsForUser" ReturnType="Collection(WarehouseModel.P_Mob_Get_BrandsForUser_Result)">
+          <Parameter Name="username" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="P_Mob_Get_ReportCategories" ReturnType="Collection(WarehouseModel.P_Mob_Get_ReportCategories_Result)">
+            <Parameter Name="UserGUID" Mode="In" Type="Guid" />
+            <Parameter Name="Familyid" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="P_Mob_Get_ReportFamilies" ReturnType="Collection(WarehouseModel.P_Mob_Get_ReportFamilies_Result)">
+          <Parameter Name="UserGUID" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="P_Mob_Get_ReportNames" ReturnType="Collection(WarehouseModel.P_Mob_Get_ReportNames_Result)">
+            <Parameter Name="UserGUID" Mode="In" Type="Guid" />
+            <Parameter Name="Familyid" Mode="In" Type="Int32" />
+            <Parameter Name="CategoryID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="P_Mob_Get_SitesForABrand" ReturnType="Collection(WarehouseModel.P_Mob_Get_SitesForABrand_Result)">
+            <Parameter Name="username" Mode="In" Type="String" />
+            <Parameter Name="brandid" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="P_Mob_Get_SitesForAUser" ReturnType="Collection(WarehouseModel.P_Mob_Get_SitesForAUser_Result)">
+          <Parameter Name="userguid" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="P_Mob_GetReportURL" ReturnType="Collection(WarehouseModel.P_Mob_GetReportURL_Result)">
+            <Parameter Name="reportid" Mode="In" Type="Int32" />
+            <Parameter Name="brandid" Mode="In" Type="Int32" />
+            <Parameter Name="siteid" Mode="In" Type="Int32" />
+            <Parameter Name="datefrom" Mode="In" Type="String" />
+            <Parameter Name="dateto" Mode="In" Type="String" />
+            <Parameter Name="userguid" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="P_Mob_Get_ReportParameters" ReturnType="Collection(String)">
+          <Parameter Name="reportid" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="Rep_Report_Names" EntityType="WarehouseModel.Rep_Report_Names" />
+          <FunctionImport Name="P_Mob_Get_ReportControls" ReturnType="Collection(WarehouseModel.P_Mob_Get_ReportControls_Result)">
+          <Parameter Name="reportid" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="P_Mob_Get_BrandsForUser_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Text" Nullable="false" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="P_Mob_Get_ReportFamilies_Result">
+          <Property Type="Int32" Name="FamilyID" Nullable="true" />
+          <Property Type="String" Name="FamilyName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="P_Mob_Get_ReportNames_Result">
+          <Property Type="Int32" Name="ReportID" Nullable="true" />
+          <Property Type="Int32" Name="categoryid" Nullable="true" />
+          <Property Type="String" Name="ReportName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="P_Mob_Get_SitesForABrand_Result">
+          <Property Type="Int32" Name="ID" Nullable="true" />
+          <Property Type="String" Name="Text" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="P_Mob_Get_SitesForAUser_Result">
+          <Property Type="Int32" Name="Brandid" Nullable="true" />
+          <Property Type="Int32" Name="SiteID" Nullable="true" />
+          <Property Type="String" Name="SiteName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="P_Mob_Get_ReportCategories_Result">
+          <Property Type="Int32" Name="familyid" Nullable="true" />
+          <Property Type="Int32" Name="CategoryID" Nullable="true" />
+          <Property Type="String" Name="Category" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="Allowed" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="P_Mob_GetReportURL_Result">
+          <Property Type="String" Name="URL" Nullable="false" MaxLength="221" />
+        </ComplexType>
+        <EntityType Name="Rep_Report_Names">
+          <Key>
+            <PropertyRef Name="ReportID" />
+          </Key>
+          <Property Name="ReportID" Type="Int32" Nullable="false" />
+          <Property Name="ReportName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryID" Type="Int32" />
+          <Property Name="ReportURL" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Format" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DateDisabled" Type="Boolean" />
+        </EntityType>
+        <ComplexType Name="P_Mob_Get_ReportControls_Result">
+          <Property Type="Int32" Name="ReportID" Nullable="true" />
+          <Property Type="String" Name="Parameter" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="ControlParameter" Nullable="true" />
+          <Property Type="String" Name="ControlType" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="LabelText" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="Visible" Nullable="false" />
+          <Property Type="String" Name="DefaultDate" Nullable="true" MaxLength="20" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="WarehouseModelStoreContainer" CdmEntityContainer="WarehouseEntities">
+          <FunctionImportMapping FunctionImportName="P_Mob_Get_BrandsForUser" FunctionName="WarehouseModel.Store.P_Mob_Get_BrandsForUser">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.P_Mob_Get_BrandsForUser_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="P_Mob_Get_ReportCategories" FunctionName="WarehouseModel.Store.P_Mob_Get_ReportCategories">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.P_Mob_Get_ReportCategories_Result">
+                <ScalarProperty Name="familyid" ColumnName="familyid" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="Allowed" ColumnName="Allowed" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="P_Mob_Get_ReportFamilies" FunctionName="WarehouseModel.Store.P_Mob_Get_ReportFamilies">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.P_Mob_Get_ReportFamilies_Result">
+                <ScalarProperty Name="FamilyID" ColumnName="FamilyID" />
+                <ScalarProperty Name="FamilyName" ColumnName="FamilyName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="P_Mob_Get_ReportNames" FunctionName="WarehouseModel.Store.P_Mob_Get_ReportNames">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.P_Mob_Get_ReportNames_Result">
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+                <ScalarProperty Name="categoryid" ColumnName="categoryid" />
+                <ScalarProperty Name="ReportName" ColumnName="ReportName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="P_Mob_Get_SitesForABrand" FunctionName="WarehouseModel.Store.P_Mob_Get_SitesForABrand">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.P_Mob_Get_SitesForABrand_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="P_Mob_Get_SitesForAUser" FunctionName="WarehouseModel.Store.P_Mob_Get_SitesForAUser">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.P_Mob_Get_SitesForAUser_Result">
+                <ScalarProperty Name="Brandid" ColumnName="Brandid" />
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="SiteName" ColumnName="SiteName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="P_Mob_GetReportURL" FunctionName="WarehouseModel.Store.P_Mob_GetReportURL" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.P_Mob_GetReportURL_Result">
+                <ScalarProperty Name="URL" ColumnName="URL" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="P_Mob_Get_ReportParameters" FunctionName="WarehouseModel.Store.P_Mob_Get_ReportParameters" />
+          <EntitySetMapping Name="Rep_Report_Names">
+            <EntityTypeMapping TypeName="WarehouseModel.Rep_Report_Names">
+              <MappingFragment StoreEntitySet="Rep_Report_Names">
+                <ScalarProperty Name="DateDisabled" ColumnName="DateDisabled" />
+                <ScalarProperty Name="Format" ColumnName="Format" />
+                <ScalarProperty Name="ReportURL" ColumnName="ReportURL" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="ReportName" ColumnName="ReportName" />
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="P_Mob_Get_ReportControls" FunctionName="WarehouseModel.Store.P_Mob_Get_ReportControls">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseModel.P_Mob_Get_ReportControls_Result">
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+                <ScalarProperty Name="Parameter" ColumnName="Parameter" />
+                <ScalarProperty Name="ControlParameter" ColumnName="ControlParameter" />
+                <ScalarProperty Name="ControlType" ColumnName="ControlType" />
+                <ScalarProperty Name="LabelText" ColumnName="LabelText" />
+                <ScalarProperty Name="Visible" ColumnName="Visible" />
+                <ScalarProperty Name="DefaultDate" ColumnName="DefaultDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

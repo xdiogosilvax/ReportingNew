@@ -12,12 +12,6 @@ namespace ReportingNew.Reports
 {
     public partial class ReportTemplate : System.Web.UI.Page
     {
-        public Dictionary<string, string> GetParameterList() 
-        {
-             return (Dictionary<string, string>)Session["paramdic"];
-
-        }
-
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -25,24 +19,24 @@ namespace ReportingNew.Reports
                 try
                 {
                     String reportFolder = System.Configuration.ConfigurationManager.AppSettings["SSRSReportsFolder"].ToString();
-                    
+
 
                     rvSiteMapping.Height = Unit.Pixel(800);/*(Convert.ToInt32(Request["Height"]));*/
                     rvSiteMapping.ProcessingMode = Microsoft.Reporting.WebForms.ProcessingMode.Remote;
-                    //rvSiteMapping.ServerReport.ReportServerUrl = new Uri("http://qsl-rep-srv01/ReportServer"); // Add the Reporting Server URL
-                    rvSiteMapping.ServerReport.ReportServerUrl = new Uri("https://testreporting.quadranet.co.uk/ReportServer"); // Add the Reporting Server URL
-                    rvSiteMapping.ServerReport.ReportPath = String.Format("/{0}/{1}","MDX Reports", Request["ReportName"].ToString());
+                    rvSiteMapping.ServerReport.ReportServerUrl = new Uri("http://172.20.64.50/ReportServer"); // Add the Reporting Server URL
+                    rvSiteMapping.ServerReport.ReportPath = String.Format("/{0}/{1}","Finished", Request["ReportName"].ToString());
                     IReportServerCredentials irsc = new CustomReportCredentials("SSRSAdmin", "QuadraN3t!1", "quadranet");
                     rvSiteMapping.ServerReport.ReportServerCredentials =irsc;
-                    Dictionary<string, string> parameters = GetParameterList();
-                    List<ReportParameter> paramList = new List<ReportParameter>();
-                    foreach (var rec in parameters) 
-                    {
-                        paramList.Add(new ReportParameter(rec.Key, rec.Value, true));
-                    }
-                 
+                    //List<ReportParameter> paramList = new List<ReportParameter>();
 
-                    rvSiteMapping.ServerReport.SetParameters(paramList);
+                    //paramList.Add(new ReportParameter("datefrom", "17 Mar 2022", true));
+                    //paramList.Add(new ReportParameter("dateto", "2 Jan 2023", true));
+                    //paramList.Add(new ReportParameter("userguid", "01181168-6215-4050-9F46-9B1DCAA1626E", true));
+                    //paramList.Add(new ReportParameter("brandid", "356", true));Q
+                    //paramList.Add(new ReportParameter("siteid", "965", true));
+                    //paramList.Add(new ReportParameter("surname", "Smith", true));
+
+                    //rvSiteMapping.ServerReport.SetParameters(paramList);
                     rvSiteMapping.ServerReport.Refresh();
                     
                 }
@@ -51,7 +45,6 @@ namespace ReportingNew.Reports
                     Console.WriteLine(ex.ToString());
                 }
             }
-            Session["RepID"] = null;
         }
     }
     
@@ -89,15 +82,9 @@ namespace ReportingNew.Reports
         {
 
             // not use FormsCredentials unless you have implements a custom autentication.
-            //authCookie = null;
-            //user = password = authority = null;
-            //return false;
-
-            user = _UserName;
-            password = _PassWord;
-            authority = null;
             authCookie = null;
-            return true;
+            user = password = authority = null;
+            return false;
         }
 
     }

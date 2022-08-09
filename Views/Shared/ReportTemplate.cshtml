@@ -1,0 +1,40 @@
+﻿@model  ReportingNew.Models.ReportInfo
+
+<div class="container">
+    <h2 class="">
+             @Model.ReportDescription
+    </h2>
+
+    <iframe class="center" id="frmReport" src="@Model.ReportURL" frameborder="0" style="@String.Format("width:{0}%; height: {1}px;", Model.Width, Model.Height)" scrolling="no">
+    </iframe>
+</div>
+
+
+<script>
+
+
+    var o = document.getElementById("one");
+    var to = document.getElementById("two");
+    to.style.display = 'none';
+
+    function openNav() {
+        document.getElementById("mySidebar").style.width = "400px";
+        document.getElementById("main").style.marginLeft = "400px";
+        o.style.display = 'none';
+        to.style.display = '';
+    }
+
+    function closeNav() {
+
+        document.getElementById("mySidebar").style.width = "0";
+        document.getElementById("main").style.marginLeft = "0";
+        o.style.display = '';
+        to.style.display = 'none';
+
+    }
+
+</script>
+
+<script src="Scripts/jquery-2.1.1.js"></script>
+<script src="Scripts/bootstrap.js"></script>
+<script src="Scripts/bootstrap.min.js"></script>

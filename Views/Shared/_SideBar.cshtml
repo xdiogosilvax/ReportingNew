@@ -1,0 +1,31 @@
+﻿
+@using ReportingNew.Models
+
+<div id="mySidebar" class="sidebar navbar-static-top">
+    @model FamilyResultResponse
+    <a href="#"></a>
+    <ul>
+
+        @foreach (var fam in Model.Families)
+        {
+            <a href="#" class="menu_fam"> @fam.FamilyName</a>
+            <ul class="">
+                @foreach (var cat in fam.FamilyCat)
+                {
+                    <li href="#" class=""><a class="menu_cat"> @cat.Category </a></li>
+                    foreach (var name in cat.FamilCatRep)
+                    {
+                        <ul class="">
+                            @*<li class=""><a href="@Url.Action("getReport", "Home", new {reportid=@name.ReportID })" class="menu_name" id="getReport"    >@name.ReportName  </a></li>*@
+                            <li class=""><a onclick="@Url.Action("getReport", "Home", new {reportid=@name.ReportID })" class="menu_name" id="getReport">@name.ReportName  </a></li>
+                        </ul>
+                    }
+                }
+            </ul>
+        }
+        
+        
+    </ul>
+</div>
+
+

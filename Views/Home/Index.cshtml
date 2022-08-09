@@ -1,0 +1,254 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+@using ReportingNew.Models;
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - DBX Reports</title>
+    @Styles.Render("~/Content/css")
+
+
+    @Scripts.Render("~/bundles/modernizr")
+
+
+</head>
+<body>
+
+
+    <style>
+        /* The sidebar menu */
+        .sidebar {
+            height: 100%; /* 100% Full-height */
+            width: 0; /* 0 width - change this with JavaScript */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Stay on top */
+            top: 0;
+            left: 0;
+            background-color: #191818; /* Black*/
+            overflow-x: hidden; /* Disable horizontal scroll */
+            padding-top: 60px; /* Place content 60px from the top */
+            transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
+        }
+
+        /* The sidebar links */
+        .menu_fam {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+        /* The sidebar links */
+        .menu_cat {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+        /* The sidebar links */
+        .menu_name {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 15px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+
+
+
+        /* When you mouse over the navigation links, change their color */
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        /* Position and style the close button (top right corner) */
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        /* The button used to open the sidebar */
+        .openbtn {
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #111;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+        }
+
+            .openbtn:hover {
+                background-color: #444;
+            }
+
+        /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+        #main {
+            transition: margin-left .5s; /* If you want a transition effect */
+            padding: 20px;
+        }
+
+        .nested {
+            display: none;
+        }
+
+        .center {
+            margin: auto;
+            width: 50%;
+            padding: 10px;
+        }
+
+
+        .center_title {
+            margin: auto;
+            width: 60%;
+            padding: 10px;
+        }
+
+        .dropdown_size {
+            min-width: 250px;
+        }
+    </style>
+
+
+    <div class="navbar navbar-inverse navbar-fixed-top ">
+        <div class="container">
+            <div class="navbar-header left">
+                <img src="~/Content/img/QuadLogoWhite.png" class="img-responsive" width=30%>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="mySidebar" class="sidebar navbar-static-top">
+        @model FamilyResultResponse
+
+
+
+        <a href="#"></a>
+
+        <ul>
+
+            @foreach (var fam in Model.Families)
+            {
+                <a href="#" class="menu_fam"> @fam.FamilyName</a>
+
+                <ul class="">
+                    @foreach (var cat in fam.FamilyCat)
+
+                    {
+
+                        <li href="#" class=""><a class="menu_cat"> @cat.Category </a></li>
+                        foreach (var name in cat.FamilCatRep)
+                        {
+                            <ul class="">
+                                @*<li class=""><a href="@Url.Action("getReport", "Home", new {reportid=@name.ReportID })" class="menu_name" id="getReport"    >@name.ReportName  </a></li>*@
+                                <li class=""><a href="@Url.Action("getReport", "Home", new {userguid=Session["userID"],sessionGuid= Session["sessionGuid"] ,repid = @name.ReportID })" class="menu_name" id="getReport">@name.ReportName  </a></li>
+                            </ul>
+                        }
+                    }
+                </ul>
+            }
+
+        </ul>
+
+    </div>
+
+
+    <div id="main">
+        <span id="one" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>
+        <span id="two" style="font-size:30px;cursor:pointer" onclick="closeNav() ">&#9776; </span>
+    </div>
+
+
+
+    @if (Session["RepID"] == null)
+    {
+        <div class="">
+            <h1 style="text-align:center">Welcome</h1>
+            <p style="text-align:center">Please choose a report</p>
+            <footer style="text-align:center">
+                <p>&copy; @DateTime.Now.Year - Quadranet</p>
+            </footer>
+
+        </div>
+    }
+    else if (Session["RepID"] != null && (bool)Session["ShowPaginatedReport"] == false)
+    {
+
+        @Html.Action("LoadForm", "Home", new ReportingNew.Models.SPMenuModel())
+    }
+    else if (Session["RepID"] != null && (bool)Session["ShowPaginatedReport"] == true)
+    {
+        @Html.Action("ReportTemplateLoader", "Home", new ReportingNew.Models.ReportInfo())
+        return;
+    }
+
+
+
+    <script>
+
+
+        var o = document.getElementById("one");
+        var to = document.getElementById("two");
+        to.style.display = 'none';
+
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "400px";
+            document.getElementById("main").style.marginLeft = "400px";
+            o.style.display = 'none';
+            to.style.display = '';
+        }
+
+        function closeNav() {
+
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+            o.style.display = '';
+            to.style.display = 'none';
+
+        }
+
+
+
+
+    </script>
+
+    <script src="Scripts/jquery-2.1.1.js"></script>
+    <script src="Scripts/bootstrap.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
