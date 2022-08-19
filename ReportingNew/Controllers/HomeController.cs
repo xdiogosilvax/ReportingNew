@@ -265,7 +265,7 @@ namespace ReportingNew.Controllers
             {
                 
                 Width = 100,
-                Height = 800,
+                Height = 600,
                 ReportName = reportName,
                 ReportDescription = reportName,
                 ReportURL = String.Format("../../../Reports/ReportTemplate.aspx?ReportName={0}&Height={1}", reportName, height)

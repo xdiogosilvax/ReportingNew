@@ -27,8 +27,9 @@ namespace ReportingNew.Reports
                     String reportFolder = System.Configuration.ConfigurationManager.AppSettings["SSRSReportsFolder"].ToString();
                     
 
-                    rvSiteMapping.Height = Unit.Pixel(800);/*(Convert.ToInt32(Request["Height"]));*/
+                    rvSiteMapping.Height = Unit.Pixel(600);/*(Convert.ToInt32(Request["Height"]));*/
                     rvSiteMapping.ProcessingMode = Microsoft.Reporting.WebForms.ProcessingMode.Remote;
+                    
                     //rvSiteMapping.ServerReport.ReportServerUrl = new Uri("http://qsl-rep-srv01/ReportServer"); // Add the Reporting Server URL
                     rvSiteMapping.ServerReport.ReportServerUrl = new Uri("https://testreporting.quadranet.co.uk/ReportServer"); // Add the Reporting Server URL
                     rvSiteMapping.ServerReport.ReportPath = String.Format("/{0}/{1}","MDX Reports", Request["ReportName"].ToString());
