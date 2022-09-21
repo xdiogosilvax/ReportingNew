@@ -48,7 +48,7 @@ namespace ReportingNew.Reports
                     
                 }
                 catch (Exception ex)
-                {
+                {   
                     Console.WriteLine(ex.ToString());
                 }
             }
