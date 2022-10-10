@@ -33,23 +33,23 @@ namespace ReportingNew.Controllers
         public string bi;
 
 
-        private bool CheckUserGuid(Guid userGuid) 
+        private bool CheckUserGuid(Guid userGuid)
         {
             string nuserGuid = userGuid.ToString();
-            var client = new RestClient("https://dbxdev.quadranet.co.uk/api/Management/ValidateSessionGUID/"+ nuserGuid);
+            var client = new RestClient("https://dbxdev.quadranet.co.uk/api/Management/ValidateSessionGUID/" + nuserGuid);
             client.Timeout = -1;
             var request = new RestRequest(Method.POST);
             IRestResponse response = client.Execute(request);
             Console.WriteLine(response.Content);
             if (response.Content == "true")
                 return true;
-           
+
             return false;
-           
+
         }
 
         //[Route("{Home}/{Index}/{userguid}/{sessionGuid}")]    
-        public ActionResult Index(Guid? userGuid, Guid? sessionGuid, int? reportId, string dbxUrl="" ,bool showrep=false)
+        public ActionResult Index(Guid? userGuid, Guid? sessionGuid, int? reportId, string dbxUrl = "", bool showrep = false)
         {
             t = showrep;
             if (t != true)
@@ -60,15 +60,15 @@ namespace ReportingNew.Controllers
             model.Families = new List<Family>();
             SPMenuModel modelSPMEnu = new SPMenuModel();
             if (Session["userID"] == null)
-                Session["userID"] = userGuid.Value; 
-            
-            if(userGuid.Value==null)
+                Session["userID"] = userGuid.Value;
+
+            if (userGuid.Value == null)
                 userGuid = (Guid?)Session["userID"];
 
             if (sessionGuid.Value != null)
                 Session["sessionGuid"] = sessionGuid.Value;
 
-            if (dbxUrl != null && dbxUrl != "") 
+            if (dbxUrl != null && dbxUrl != "")
                 Session["dbxUrl"] = dbxUrl;
 
             if (reportId > 0 && reportId != null)
@@ -114,185 +114,281 @@ namespace ReportingNew.Controllers
         [Route("Home/getReport/{userguid}/{sessionGuid}/{repid}/{dbxUrl}")]
         public ActionResult getReport(Guid? userGuid, Guid? sessionGuid, int? repid, string dbxUrl)
         {
+            try
+            {
+                string userID;
+                string sessionID;
+                Session["RepID"] = repid;
+                var reportId = Session["RepID"];
+                if (userGuid == null)
+                    userID = Session["userID"].ToString();
+                else
+                {
+                    userID = userGuid.ToString();
+                    Session["userID"] = userID;
 
-            string userID;
-            string sessionID;
-            Session["RepID"] = repid;
-            var reportId = Session["RepID"];
-            if (userGuid == null)
-                userID = Session["userID"].ToString();
-            else
-            { 
-                userID = userGuid.ToString();
-                Session["userID"]= userID;
+                }
+                // var url= HttpUtility.UrlDecode(dbxUrl);
+                Session["dbxUrl"] = url;
+                if (Session == null)
+                    sessionID = Session["sessionGuid"].ToString();
+                else
+                    sessionID = sessionGuid.ToString();
 
+                var dc = new WarehouseEntities();
+                var balls = context.P_Mob_Get_ReportNamesD(repid);
+
+                //var rep = GetReportRec((int)reportId);
+                //string repName = "Luke stop breaking things pls";
+                //if(rep!=null && (rep.ReportName==null || rep.ReportName=="" ))
+                //    repName = rep.ReportName;
+
+                Session["reportname"] = balls.First();
+
+                return RedirectToAction("Index", "Home", new { userguid = userID, sessionGuid = sessionID, reportId = reportId, dbxUrl = url });
             }
-           // var url= HttpUtility.UrlDecode(dbxUrl);
-            Session["dbxUrl"]=url;
-            if (Session == null)
-                sessionID = Session["sessionGuid"].ToString();
-            else
-                sessionID = sessionGuid.ToString();
+            catch (Exception e)
+            {
+                var log = new WebLog()
+                {
+                    TimeStamp = DateTime.Now,
+                    Level = "fatal",
+                    UserMessage = "Fatal in LoadForm2",
+                    StackTrace = e.StackTrace,
+                    ExceptionMessage = e.Message
+                };
+                AddToLog(log);
+                return null;
+            }
 
-            var dc = new WarehouseEntities();
-            var balls = context.P_Mob_Get_ReportNamesD(repid);
 
-            //var rep = GetReportRec((int)reportId);
-            //string repName = "Luke stop breaking things pls";
-            //if(rep!=null && (rep.ReportName==null || rep.ReportName=="" ))
-            //    repName = rep.ReportName;
 
-            Session["reportname"] = balls.First();
 
-            return RedirectToAction("Index", "Home", new { userguid = userID, sessionGuid= sessionID, reportId = reportId, dbxUrl=url});
         }
 
 
-    //   [Route("Home/LoadForm2/{userguid}/{sessionGuid}/{repid}/{dbxUrl}")]
-        public ActionResult LoadForm2(SPMenuModel  model)
+        //   [Route("Home/LoadForm2/{userguid}/{sessionGuid}/{repid}/{dbxUrl}")]
+        public ActionResult LoadForm2(SPMenuModel model)
         {
-            var userGuid = Guid.Parse(Session["userID"].ToString());
-            int repID = Convert.ToInt32(Session["RepID"]);
-   
-            model.sitesRep = context.P_Mob_Get_SitesForAUser(userGuid);
+            try
+            {
 
-            var paramenterRecords = context.P_Mob_Get_ReportControls(repID);
-            model.reportControls = paramenterRecords;
-            return PartialView("_Form", model);
+                var userGuid = Guid.Parse(Session["userID"].ToString());
+                int repID = Convert.ToInt32(Session["RepID"]);
+
+                model.sitesRep = context.P_Mob_Get_SitesForAUser(userGuid);
+
+                var paramenterRecords = context.P_Mob_Get_ReportControls(repID);
+                model.reportControls = paramenterRecords;
+                return PartialView("_Form", model);
+            }
+            catch (Exception e)
+            {
+                var log = new WebLog()
+                {
+                    TimeStamp = DateTime.Now,
+                    Level = "fatal",
+                    UserMessage = "Fatal in LoadForm2",
+                    StackTrace = e.StackTrace,
+                    ExceptionMessage = e.Message
+                };
+                AddToLog(log);
+                return null;
+            }
+
+
         }
 
 
-            
+
         [Route("Home/urlJT/{userGuid}/{sessionGuid}/{repid}/{dbxUrl}")]
         public ActionResult urlJT(string userGuid, string sessionGuid, int repid, string dbxUrl)
         {
-            SPMenuModel model = new SPMenuModel();
-            var keys = Request.Form.AllKeys;
-            Dictionary<string, string> ParmsAndValues = new Dictionary<string, string>();
-            var reprec = GetReportRec(repid);
-
-            var dateFrom = "0";
-            var dateTo = "0";
-            var userID = Guid.Parse(userGuid);
-            var site = Request.Form.Get(keys[0]);
-            ParmsAndValues.Add(keys[0], site);
-            if (Convert.ToInt32(keys.Length) <= 1)
+            try
             {
-                dateFrom = null;
-                dateTo = null;
-            }
-            else
-            {
-                var dates = Request.Form.Get(keys[1]).ToString();
-                string[] split = dates.Split(',');
-                dateFrom = split[0];
-                dateTo = split[1];
-                ParmsAndValues.Add("dateFrom", dateFrom);
-                ParmsAndValues.Add("dateTo", dateTo);
-            }
-            
-            var urlFromSP = "0";
-            var brand = 0;
-            var siteID = 0;
+                SPMenuModel model = new SPMenuModel();
+                var keys = Request.Form.AllKeys;
+                Dictionary<string, string> ParmsAndValues = new Dictionary<string, string>();
+                var reprec = GetReportRec(repid);
 
-            P_Mob_GetReportURL_Result test = new P_Mob_GetReportURL_Result();
-            ObjectResult<P_Mob_Get_SitesForAUser_Result> objectResult_sites = context.P_Mob_Get_SitesForAUser(userID);
-
-            foreach (var i in objectResult_sites.AsEnumerable())
-            {
-                if (i.SiteName == site)
+                var dateFrom = "0";
+                var dateTo = "0";
+                var userID = Guid.Parse(userGuid);
+                var site = Request.Form.Get(keys[0]);
+                ParmsAndValues.Add(keys[0], site);
+                if (Convert.ToInt32(keys.Length) <= 1)
                 {
-                    brand = Convert.ToInt32(i.Brandid);
-                    siteID = Convert.ToInt32(i.SiteID);
+                    dateFrom = null;
+                    dateTo = null;
                 }
-            }
-            if (reprec.Format == "1")
-            {
-                ObjectResult<P_Mob_GetReportURL_Result> objectResultURL = context.P_Mob_GetReportURL(repid, brand, siteID, dateFrom, dateTo, userID);
-
-                foreach (var reportURL_Result in objectResultURL.AsEnumerable())
+                else
                 {
-                    urlFromSP = reportURL_Result.URL.ToString();
+                    var dates = Request.Form.Get(keys[1]).ToString();
+                    string[] split = dates.Split(',');
+                    dateFrom = split[0];
+                    dateTo = split[1];
+                    ParmsAndValues.Add("dateFrom", dateFrom);
+                    ParmsAndValues.Add("dateTo", dateTo);
                 }
-                var dbxUrlCoded =HttpUtility.UrlEncode(dbxUrl);
-                
-                var authenticatedUrl = urlFromSP + "?sessionGuid=" + sessionGuid+ "?dbx="+ dbxUrlCoded;
-                Session["RepID"] = null;
-                List<string> keyss = new List<string>();
 
-                var staleItem = Url.Action("urlJT", "Home", new
+                var urlFromSP = "0";
+                var brand = 0;
+                var siteID = 0;
+
+                P_Mob_GetReportURL_Result test = new P_Mob_GetReportURL_Result();
+                ObjectResult<P_Mob_Get_SitesForAUser_Result> objectResult_sites = context.P_Mob_Get_SitesForAUser(userID);
+
+                foreach (var i in objectResult_sites.AsEnumerable())
                 {
-                    userGuid=userGuid,
-                    sessionGuid=sessionGuid,
-                    repid=repid,
-                    dbxUrl=dbxUrl
-                });
+                    if (i.SiteName == site)
+                    {
+                        brand = Convert.ToInt32(i.Brandid);
+                        siteID = Convert.ToInt32(i.SiteID);
+                    }
+                }
+                if (reprec.Format == "1")
+                {
+                    ObjectResult<P_Mob_GetReportURL_Result> objectResultURL = context.P_Mob_GetReportURL(repid, brand, siteID, dateFrom, dateTo, userID);
 
-                //  Remove the item from cache  
-                Response.RemoveOutputCacheItem(staleItem);
-                Session["RepID"] = null;
-                return Redirect(authenticatedUrl.ToString());
+                    foreach (var reportURL_Result in objectResultURL.AsEnumerable())
+                    {
+                        urlFromSP = reportURL_Result.URL.ToString();
+                    }
+                    var dbxUrlCoded = HttpUtility.UrlEncode(dbxUrl);
+
+                    var authenticatedUrl = urlFromSP + "?sessionGuid=" + sessionGuid + "?dbx=" + dbxUrlCoded;
+                    Session["RepID"] = null;
+                    List<string> keyss = new List<string>();
+
+                    var staleItem = Url.Action("urlJT", "Home", new
+                    {
+                        userGuid = userGuid,
+                        sessionGuid = sessionGuid,
+                        repid = repid,
+                        dbxUrl = dbxUrl
+                    });
+
+                    //  Remove the item from cache  
+                    Response.RemoveOutputCacheItem(staleItem);
+                    Session["RepID"] = null;
+                    return Redirect(authenticatedUrl.ToString());
+                }
+                else if (reprec.Format == "2")
+                {
+                    t = true;
+                    Session["ShowPaginatedReport"] = t;
+                    var family = new FamilyResultResponse();
+                    family.ShowReports = true;
+                    df = dateFrom;
+                    dt = dateTo;
+                    ug = userGuid;
+                    bi = brand.ToString();
+                    si = siteID.ToString();
+                    Session["reportname"] = reprec.ReportName;
+                    dic.Add("datefrom", dateFrom);
+                    dic.Add("dateto", dateTo);
+                    dic.Add("userguid", userGuid);
+                    dic.Add("brandid", brand.ToString());
+                    dic.Add("siteid", siteID.ToString());
+                    Session["paramdic"] = dic;
+
+                    return RedirectToAction("Index", "Home", new { userguid = userID, sessionGuid = sessionGuid, showrep = t });
+
+                }
+                return RedirectToAction("Index", "Home", new { userguid = userID, sessionGuid = sessionGuid, showrep = t });
             }
-            else if(reprec.Format=="2")
+            catch (Exception e)
             {
-                t = true;
-                Session["ShowPaginatedReport"] = t;
-                var family = new FamilyResultResponse();
-                family.ShowReports = true;
-                df = dateFrom;
-                dt = dateTo;
-                ug = userGuid;
-                bi = brand.ToString();
-                si = siteID.ToString();
-                Session["reportname"] = reprec.ReportName;
-                dic.Add("datefrom", dateFrom);
-                dic.Add("dateto", dateTo);
-                dic.Add("userguid", userGuid);
-                dic.Add("brandid", brand.ToString());
-                dic.Add("siteid", siteID.ToString());
-                Session["paramdic"] = dic;
-
-                return RedirectToAction("Index", "Home", new { userguid = userID, sessionGuid= sessionGuid, showrep=t });
-                
+                var log = new WebLog()
+                {
+                    TimeStamp = DateTime.Now,
+                    Level = "fatal",
+                    UserMessage = "Fatal in urlJT",
+                    StackTrace = e.StackTrace,
+                    ExceptionMessage = e.Message
+                };
+                AddToLog(log);
+                return null;
             }
-            return RedirectToAction("Index", "Home", new { userguid = userID, sessionGuid = sessionGuid, showrep = t });
 
         }
         //[Route("Home/ReportTemplateLoader/{reportName}")]
-        public ActionResult ReportTemplateLoader() 
+        public ActionResult ReportTemplateLoader()
         {
-        //    var reprec = GetReportRec(repid);
-
-
-            var height = 500;
-            var reportName = Session["reportname"].ToString();
-            if (reportName == null)
+            //    var reprec = GetReportRec(repid);
+            try
             {
-                reportName = "Luke Done Broke it";
+
+
+                var height = 500;
+                var reportName = Session["reportname"].ToString();
+                if (reportName == null)
+                {
+                    reportName = "Luke Done Broke it";
+                }
+
+                var rptInfo = new ReportInfo
+                {
+
+                    Width = 100,
+                    Height = 600,
+                    ReportName = reportName,
+                    ReportDescription = reportName,
+                    ReportURL = String.Format("../../../Reports/ReportTemplate.aspx?ReportName={0}&Height={1}", reportName, height)
+
+                };
+                return PartialView("ReportTemplate", rptInfo);
+            }
+            catch (Exception e)
+            {
+                var log = new WebLog()
+                {
+                    TimeStamp = DateTime.Now,
+                    Level = "fatal",
+                    UserMessage = "Fatal in ReportTemplateLoader",
+                    StackTrace = e.StackTrace,
+                    ExceptionMessage = e.Message
+                };
+                AddToLog(log);
+                return null;
+            }
+        }
+
+
+        public Rep_Report_Names GetReportRec(int reportID)
+        {
+            try
+            {
+
+                var dc = new WarehouseEntities();
+                var reprec = dc.Rep_Report_Names.Where(w => w.ReportID == reportID).FirstOrDefault();
+                if (reprec == null)
+                    return null;
+                return reprec;
+            }
+            catch (Exception e)
+            {
+                var log = new WebLog()
+                {
+                    TimeStamp = DateTime.Now,
+                    Level = "fatal",
+                    UserMessage = "Fatal in GetReportRec",
+                    StackTrace = e.StackTrace,
+                    ExceptionMessage = e.Message
+                };
+                AddToLog(log);
+                return null;
             }
 
-            var rptInfo = new ReportInfo
-            {
-                
-                Width = 100,
-                Height = 600,
-                ReportName = reportName,
-                ReportDescription = reportName,
-                ReportURL = String.Format("../../../Reports/ReportTemplate.aspx?ReportName={0}&Height={1}", reportName, height)
-                
-            };
-            return PartialView("ReportTemplate", rptInfo);
         }
-        
 
-        public Rep_Report_Names GetReportRec(int reportID)                                     
+        public void AddToLog(WebLog rec)
         {
             var dc = new WarehouseEntities();
-            var reprec = dc.Rep_Report_Names.Where(w => w.ReportID == reportID).FirstOrDefault();
-            if (reprec == null)
-                return null;
-            return reprec;
+            dc.WebLogs.Add(rec);
+            dc.SaveChanges();
         }
+
 
 
     }

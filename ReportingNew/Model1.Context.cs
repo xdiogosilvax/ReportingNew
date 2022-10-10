@@ -29,6 +29,7 @@ namespace ReportingNew
         }
     
         public DbSet<Rep_Report_Names> Rep_Report_Names { get; set; }
+        public DbSet<WebLog> WebLogs { get; set; }
     
         public virtual ObjectResult<P_Mob_Get_BrandsForUser_Result> P_Mob_Get_BrandsForUser(string username)
         {

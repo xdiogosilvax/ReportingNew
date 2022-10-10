@@ -16,6 +16,22 @@
           <Property Name="Format" Type="nvarchar" MaxLength="50" />
           <Property Name="DateDisabled" Type="bit" />
         </EntityType>
+        <EntityType Name="WebLog">
+          <Key>
+            <PropertyRef Name="LogID" />
+          </Key>
+          <Property Name="LogID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TimeStamp" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="Level" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserMessage" Type="nvarchar(max)" />
+          <Property Name="CallSite" Type="varchar(max)" />
+          <Property Name="ExceptionType" Type="varchar" MaxLength="250" />
+          <Property Name="ExceptionMessage" Type="nvarchar(max)" />
+          <Property Name="StackTrace" Type="nvarchar(max)" />
+          <Property Name="CallingStack" Type="nvarchar(max)" />
+          <Property Name="ClientId" Type="int" />
+          <Property Name="SiteId" Type="int" />
+        </EntityType>
         <Function Name="P_Mob_Get_BrandsForUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="username" Type="nvarchar" Mode="In" />
         </Function>
@@ -57,6 +73,7 @@
         </Function>
         <EntityContainer Name="WarehouseModelStoreContainer">
           <EntitySet Name="Rep_Report_Names" EntityType="Self.Rep_Report_Names" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WebLog" EntityType="Self.WebLog" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -107,8 +124,9 @@
           <Parameter Name="reportid" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="P_Mob_Get_ReportNamesD" ReturnType="Collection(String)">
-            <Parameter Name="reportid" Mode="In" Type="Int32" />
+          <Parameter Name="reportid" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="WebLogs" EntityType="WarehouseModel.WebLog" />
         </EntityContainer>
         <ComplexType Name="P_Mob_Get_BrandsForUser_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
@@ -161,6 +179,22 @@
           <Property Type="Boolean" Name="Visible" Nullable="false" />
           <Property Type="String" Name="DefaultDate" Nullable="true" MaxLength="20" />
         </ComplexType>
+        <EntityType Name="WebLog">
+          <Key>
+            <PropertyRef Name="LogID" />
+          </Key>
+          <Property Name="LogID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TimeStamp" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="Level" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UserMessage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CallSite" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ExceptionType" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="ExceptionMessage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StackTrace" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CallingStack" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClientId" Type="Int32" />
+          <Property Name="SiteId" Type="Int32" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -253,6 +287,23 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="P_Mob_Get_ReportNamesD" FunctionName="WarehouseModel.Store.P_Mob_Get_ReportNamesD" />
+          <EntitySetMapping Name="WebLogs">
+            <EntityTypeMapping TypeName="WarehouseModel.WebLog">
+              <MappingFragment StoreEntitySet="WebLog">
+                <ScalarProperty Name="SiteId" ColumnName="SiteId" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="CallingStack" ColumnName="CallingStack" />
+                <ScalarProperty Name="StackTrace" ColumnName="StackTrace" />
+                <ScalarProperty Name="ExceptionMessage" ColumnName="ExceptionMessage" />
+                <ScalarProperty Name="ExceptionType" ColumnName="ExceptionType" />
+                <ScalarProperty Name="CallSite" ColumnName="CallSite" />
+                <ScalarProperty Name="UserMessage" ColumnName="UserMessage" />
+                <ScalarProperty Name="Level" ColumnName="Level" />
+                <ScalarProperty Name="TimeStamp" ColumnName="TimeStamp" />
+                <ScalarProperty Name="LogID" ColumnName="LogID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
