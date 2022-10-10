@@ -59,9 +59,13 @@ namespace ReportingNew.Controllers
             var model = new FamilyResultResponse();
             model.Families = new List<Family>();
             SPMenuModel modelSPMEnu = new SPMenuModel();
-            Session["userID"] = userGuid.Value; 
+            if (Session["userID"] == null)
+                Session["userID"] = userGuid.Value; 
+            
+            if(userGuid.Value==null)
+                userGuid = (Guid?)Session["userID"];
 
-            if (sessionGuid != null)
+            if (sessionGuid.Value != null)
                 Session["sessionGuid"] = sessionGuid.Value;
 
             if (dbxUrl != null && dbxUrl != "") 
@@ -257,10 +261,11 @@ namespace ReportingNew.Controllers
         //[Route("Home/ReportTemplateLoader/{reportName}")]
         public ActionResult ReportTemplateLoader() 
         {
-            
-            
+        //    var reprec = GetReportRec(repid);
+
+
             var height = 500;
-            var reportName = Session["ReportName"].ToString();
+            var reportName = Session["reportname"].ToString();
             var rptInfo = new ReportInfo
             {
                 
