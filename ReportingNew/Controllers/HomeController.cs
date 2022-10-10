@@ -145,6 +145,15 @@ namespace ReportingNew.Controllers
 
                 Session["reportname"] = balls.First();
 
+                var log = new WebLog()
+                {
+                    TimeStamp = DateTime.Now,
+                    Level = "fatal",
+                    UserMessage = "Fatal in LoadForm2",
+                    ExceptionMessage = Session["reportname"].ToString()
+                };
+                AddToLog(log);
+
                 return RedirectToAction("Index", "Home", new { userguid = userID, sessionGuid = sessionID, reportId = reportId, dbxUrl = url });
             }
             catch (Exception e)
@@ -160,10 +169,6 @@ namespace ReportingNew.Controllers
                 AddToLog(log);
                 return null;
             }
-
-
-
-
         }
 
 

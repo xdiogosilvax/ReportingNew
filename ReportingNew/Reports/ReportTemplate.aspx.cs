@@ -7,6 +7,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Microsoft.Reporting.WebForms;
 using System.Security.Principal;
+using ReportingNew.Controllers;
 
 namespace ReportingNew.Reports
 {
@@ -25,8 +26,16 @@ namespace ReportingNew.Reports
                 try
                 {
                     String reportFolder = System.Configuration.ConfigurationManager.AppSettings["SSRSReportsFolder"].ToString();
-                    
 
+                    var test = new HomeController();
+                    var log = new WebLog()
+                    {
+                        Level = "Info",
+                        TimeStamp = DateTime.Now,
+                        UserMessage="Got to the report loader"
+                    };
+
+                    test.AddToLog(log);
                     rvSiteMapping.Height = Unit.Pixel(600);/*(Convert.ToInt32(Request["Height"]));*/
                     rvSiteMapping.ProcessingMode = Microsoft.Reporting.WebForms.ProcessingMode.Remote;
                     
