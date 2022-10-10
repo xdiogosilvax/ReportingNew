@@ -135,14 +135,12 @@ namespace ReportingNew.Controllers
                 sessionID = sessionGuid.ToString();
 
             var dc = new WarehouseEntities();
-            var query = (from t
-                        in context.Rep_Report_Names
-                         where t.ReportID == repid
-                         select new { t.ReportName }).Single();
 
-            var repName = query.ReportName;
+            var rep = GetReportRec((int)reportId);
 
-            Session["RepName"] = repName;
+            var repName = rep.ReportName;
+
+            Session["reportname"] = repName;
 
             return RedirectToAction("Index", "Home", new { userguid = userID, sessionGuid= sessionID, reportId = reportId, dbxUrl=url});
         }
@@ -266,6 +264,11 @@ namespace ReportingNew.Controllers
 
             var height = 500;
             var reportName = Session["reportname"].ToString();
+            if (reportName == null)
+            {
+
+            }
+
             var rptInfo = new ReportInfo
             {
                 
