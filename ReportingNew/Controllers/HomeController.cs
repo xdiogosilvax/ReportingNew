@@ -135,12 +135,14 @@ namespace ReportingNew.Controllers
                 sessionID = sessionGuid.ToString();
 
             var dc = new WarehouseEntities();
+            var balls = context.P_Mob_Get_ReportNamesD(repid);
 
-            var rep = GetReportRec((int)reportId);
+            //var rep = GetReportRec((int)reportId);
+            //string repName = "Luke stop breaking things pls";
+            //if(rep!=null && (rep.ReportName==null || rep.ReportName=="" ))
+            //    repName = rep.ReportName;
 
-            var repName = rep.ReportName;
-
-            Session["reportname"] = repName;
+            Session["reportname"] = balls.First();
 
             return RedirectToAction("Index", "Home", new { userguid = userID, sessionGuid= sessionID, reportId = reportId, dbxUrl=url});
         }
@@ -266,7 +268,7 @@ namespace ReportingNew.Controllers
             var reportName = Session["reportname"].ToString();
             if (reportName == null)
             {
-
+                reportName = "Luke Done Broke it";
             }
 
             var rptInfo = new ReportInfo
@@ -283,7 +285,7 @@ namespace ReportingNew.Controllers
         }
         
 
-        public Rep_Report_Names GetReportRec(int reportID)
+        public Rep_Report_Names GetReportRec(int reportID)                                     
         {
             var dc = new WarehouseEntities();
             var reprec = dc.Rep_Report_Names.Where(w => w.ReportID == reportID).FirstOrDefault();

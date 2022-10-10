@@ -34,6 +34,9 @@
           <Parameter Name="Familyid" Type="int" Mode="In" />
           <Parameter Name="CategoryID" Type="int" Mode="In" />
         </Function>
+        <Function Name="P_Mob_Get_ReportNamesD" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="reportid" Type="int" Mode="In" />
+        </Function>
         <Function Name="P_Mob_Get_ReportParameters" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="reportid" Type="int" Mode="In" />
         </Function>
@@ -102,6 +105,9 @@
           <EntitySet Name="Rep_Report_Names" EntityType="WarehouseModel.Rep_Report_Names" />
           <FunctionImport Name="P_Mob_Get_ReportControls" ReturnType="Collection(WarehouseModel.P_Mob_Get_ReportControls_Result)">
           <Parameter Name="reportid" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="P_Mob_Get_ReportNamesD" ReturnType="Collection(String)">
+            <Parameter Name="reportid" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="P_Mob_Get_BrandsForUser_Result">
@@ -246,6 +252,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="P_Mob_Get_ReportNamesD" FunctionName="WarehouseModel.Store.P_Mob_Get_ReportNamesD" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
