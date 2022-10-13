@@ -164,7 +164,7 @@
                         foreach (var name in cat.FamilCatRep)
                         {
                             <ul class="">
-                                <li class=""><a href="@Url.Action("getReport", "Home", new {userguid=Session["userID"],sessionGuid= Session["sessionGuid"] ,repid = @name.ReportID, dbxUrl=HttpUtility.UrlEncode(Session["dbxUrl"].ToString()) })" class="menu_name" id="getReport">@name.ReportName  </a></li>
+                                <li class=""><a href="@Url.Action("getReport", "Home", new {userguid=Session["userID"],sessionGuid= Session["sessionGuid"] ,repid = @name.ReportID, dbxUrl=HttpUtility.UrlEncode(Session["dbxUrl"]?.ToString()) })" class="menu_name" id="getReport">@name.ReportName  </a></li>
                             </ul>
                         }
                     }
@@ -197,7 +197,7 @@
     {
         @*@Html.Action("LoadForm2", "Home", new { userguid = Session["userID"], sessionGuid = Session["sessionGuid"], dbxUrl = HttpUtility.UrlEncode(Session["dbxUrl"].ToString()"]) })*@
         @Html.Action("LoadForm2", "Home", new ReportingNew.Models.SPMenuModel())
-        @*@Html.Action("LoadForm", "Home", new {userguid= Session["userID"], sessionGuid= Session["sessionGuid"], dbxUrl= HttpUtility.UrlEncode(Session["dbxUrl"].ToString()), reportId= Session["RepID"]})*@
+        @*@Html.Action("LoadForm", "Home", new {userguid= Session["userID"], sessionGuid= Session["sessionGuid"], dbxUrl= HttpUtility.UrlEncode(Session["dbxUrl"]?.ToString()), reportId= Session["RepID"]})*@
     }
     else if (Session["RepID"] != null && (bool)Session["ShowPaginatedReport"] == true)
     {

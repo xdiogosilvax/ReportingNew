@@ -61,7 +61,13 @@ namespace ReportingNew.Reports
                     Console.WriteLine(ex.ToString());
                 }
             }
+            Session["reportname"] = null;
+            Session["userID"] = null;
+            Session["dbxurl"] = null;
             Session["RepID"] = null;
+            Session["sessionGuid"] = null;
+            Session["paramdic"] = null;
+            Session["ShowPaginatedReport"] = null;
         }
     }
     

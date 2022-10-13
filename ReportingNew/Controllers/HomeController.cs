@@ -59,19 +59,13 @@ namespace ReportingNew.Controllers
             var model = new FamilyResultResponse();
             model.Families = new List<Family>();
             SPMenuModel modelSPMEnu = new SPMenuModel();
-            if (Session["userID"] == null)
+
                 Session["userID"] = userGuid.Value;
 
-            if (userGuid.Value == null)
-                userGuid = (Guid?)Session["userID"];
-
-            if (sessionGuid.Value != null)
                 Session["sessionGuid"] = sessionGuid.Value;
 
-            if (dbxUrl != null && dbxUrl != "")
                 Session["dbxUrl"] = dbxUrl;
 
-            if (reportId > 0 && reportId != null)
                 Session["RepID"] = reportId.Value;
 
             foreach (var f in context.P_Mob_Get_ReportFamilies(userGuid).ToList())
@@ -261,7 +255,7 @@ namespace ReportingNew.Controllers
                     }
                     var dbxUrlCoded = HttpUtility.UrlEncode(dbxUrl);
 
-                    var authenticatedUrl = urlFromSP + "?sessionGuid=" + sessionGuid + "?dbx=" + dbxUrlCoded;
+                    var authenticatedUrl = urlFromSP + "&sessionGuid=" + sessionGuid + "&dbx=" + dbxUrlCoded;
                     Session["RepID"] = null;
                     List<string> keyss = new List<string>();
 
@@ -275,7 +269,13 @@ namespace ReportingNew.Controllers
 
                     //  Remove the item from cache  
                     Response.RemoveOutputCacheItem(staleItem);
+                    Session["reportname"] = null;
+                    Session["userID"] = null;
+                    Session["dbxurl"] = null;
                     Session["RepID"] = null;
+                    Session["sessionGuid"] = null;
+                    Session["paramdic"] = null;
+                    Session["ShowPaginatedReport"] = null;
                     return Redirect(authenticatedUrl.ToString());
                 }
                 else if (reprec.Format == "2")
