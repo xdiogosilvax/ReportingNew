@@ -60,13 +60,13 @@ namespace ReportingNew.Controllers
             model.Families = new List<Family>();
             SPMenuModel modelSPMEnu = new SPMenuModel();
 
-                Session["userID"] = userGuid.Value;
+                Session["userID"] = userGuid;
 
-                Session["sessionGuid"] = sessionGuid.Value;
+                Session["sessionGuid"] = sessionGuid;
 
                 Session["dbxUrl"] = dbxUrl;
 
-                Session["RepID"] = reportId.Value;
+                Session["RepID"] = reportId;
 
             foreach (var f in context.P_Mob_Get_ReportFamilies(userGuid).ToList())
             {
@@ -297,10 +297,10 @@ namespace ReportingNew.Controllers
                     dic.Add("siteid", siteID.ToString());
                     Session["paramdic"] = dic;
 
-                    return RedirectToAction("Index", "Home", new { userguid = userID, sessionGuid = sessionGuid, showrep = t });
+                    return RedirectToAction("Index", "Home", new { userguid = userID, sessionGuid = sessionGuid, reportId = repid, showrep = t });
 
                 }
-                return RedirectToAction("Index", "Home", new { userguid = userID, sessionGuid = sessionGuid, showrep = t });
+                return RedirectToAction("Index", "Home", new { userguid = userID, sessionGuid = sessionGuid, reportId = repid, showrep = t });
             }
             catch (Exception e)
             {
