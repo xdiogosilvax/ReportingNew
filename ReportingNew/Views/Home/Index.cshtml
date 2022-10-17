@@ -125,9 +125,6 @@
         .dropdown_size {
             min-width: 250px;
         }
-
-
-
     </style>
 
 
@@ -164,7 +161,7 @@
                         foreach (var name in cat.FamilCatRep)
                         {
                             <ul class="">
-                                <li class=""><a href="@Url.Action("getReport", "Home", new {userguid=Session["userID"],sessionGuid= Session["sessionGuid"] ,repid = @name.ReportID, dbxUrl=HttpUtility.UrlEncode(Session["dbxUrl"]?.ToString()) })" class="menu_name" id="getReport">@name.ReportName  </a></li>
+                                <li class=""><a href="@Url.Action("getReport", "Home", new {userguid=Model.UserID,sessionGuid= Model.SessionGuid,repid = @name.ReportID, dbxUrl=HttpUtility.UrlEncode(Model.DbxUrl) })" class="menu_name" id="getReport">@name.ReportName  </a></li>
                             </ul>
                         }
                     }
@@ -183,7 +180,7 @@
 
 
 
-    @if (Session["RepID"] == null)
+    @if (Model.ReportId == null)
     {
         <div class="">
             <h1 style="text-align:center">Welcome</h1>
@@ -193,15 +190,16 @@
             </footer>
         </div>
     }
-    else if (Session["RepID"] != null && (bool)Session["ShowPaginatedReport"] == false)
+    else if (Model.ReportId != null && Model.ShowPaginatedReport == false)
     {
-        @*@Html.Action("LoadForm2", "Home", new { userguid = Session["userID"], sessionGuid = Session["sessionGuid"], dbxUrl = HttpUtility.UrlEncode(Session["dbxUrl"].ToString()"]) })*@
-        @Html.Action("LoadForm2", "Home", new ReportingNew.Models.SPMenuModel())
-        @*@Html.Action("LoadForm", "Home", new {userguid= Session["userID"], sessionGuid= Session["sessionGuid"], dbxUrl= HttpUtility.UrlEncode(Session["dbxUrl"]?.ToString()), reportId= Session["RepID"]})*@
+        @*@Html.Action("LoadForm2", "Home", new { userguid = Model.UserID, sessionGuid = Model.SessionGuid, dbxUrl = HttpUtility.UrlEncode(Model.DbxUrl) })*@
+        @Html.Action("LoadForm2", "Home", new ReportingNew.Models.SPMenuModel() { ReportId = Model.ReportId.Value, ReportName = Model.ReportName, DbxUrl = Model.DbxUrl, SessionGuid = Model.SessionGuid, UserID = Model.UserID })
+        @*@Html.Action("LoadForm", "Home", new {userguid= Model.UserID, sessionGuid= Model.SessionGuid, dbxUrl= HttpUtility.UrlEncode(Model.DbxUrl), reportId= Model.ReportId.Value})*@
     }
-    else if (Session["RepID"] != null && (bool)Session["ShowPaginatedReport"] == true)
+    else if (Model.ReportId != null && Model.ShowPaginatedReport == true)
     {
-        @Html.Action("ReportTemplateLoader", "Home", new ReportingNew.Models.ReportInfo())
+        @Html.Action("ReportTemplateLoader", "Home", new { reportName = Model.ReportName, datefrom = Model.DateFrom, dateto = Model.DateTo, userguid = Model.UserID, brandid = Model.BrandId, siteid = Model.SiteId })
+
         return;
     }
 

@@ -49,24 +49,22 @@ namespace ReportingNew.Controllers
         }
 
         //[Route("{Home}/{Index}/{userguid}/{sessionGuid}")]    
-        public ActionResult Index(Guid? userGuid, Guid? sessionGuid, int? reportId, string dbxUrl = "", bool showrep = false)
+        public ActionResult Index(Guid? userGuid, Guid? sessionGuid, int? reportId, string dbxUrl = "", bool showrep = false, string reportName = null, string dateFrom = null, string dateTo = null, string brandId = null, string siteId = null)
         {
-            t = showrep;
-            if (t != true)
-            {
-                Session["ShowPaginatedReport"] = t;
-            }
+
             var model = new FamilyResultResponse();
+            model.ShowPaginatedReport = showrep;
+            model.ReportName = reportName;
             model.Families = new List<Family>();
-            SPMenuModel modelSPMEnu = new SPMenuModel();
+            model.DbxUrl = dbxUrl;
+            model.SessionGuid = sessionGuid;
+            model.UserID = userGuid;
+            model.DateFrom = dateFrom;
+            model.DateTo = dateTo;
+            model.BrandId = brandId;
+            model.SiteId = siteId;
 
-                Session["userID"] = userGuid;
-
-                Session["sessionGuid"] = sessionGuid;
-
-                Session["dbxUrl"] = dbxUrl;
-
-                Session["RepID"] = reportId;
+            model.ReportId = reportId;
 
             foreach (var f in context.P_Mob_Get_ReportFamilies(userGuid).ToList())
             {
@@ -99,7 +97,7 @@ namespace ReportingNew.Controllers
                 model.Families.Add(fam);
 
             }
-            modelSPMEnu.familyResult = model;
+
             return View(model);
         }
 
@@ -110,23 +108,14 @@ namespace ReportingNew.Controllers
         {
             try
             {
-                string userID;
+                string userID = null;
                 string sessionID;
-                Session["RepID"] = repid;
-                var reportId = Session["RepID"];
-                if (userGuid == null)
-                    userID = Session["userID"].ToString();
-                else
-                {
+                if (userGuid != null)
+                { 
                     userID = userGuid.ToString();
-                    Session["userID"] = userID;
-
                 }
-                // var url= HttpUtility.UrlDecode(dbxUrl);
-                Session["dbxUrl"] = url;
-                if (Session == null)
-                    sessionID = Session["sessionGuid"].ToString();
-                else
+                //var url= HttpUtility.UrlDecode(dbxUrl);
+
                     sessionID = sessionGuid.ToString();
 
                 var dc = new WarehouseEntities();
@@ -137,18 +126,18 @@ namespace ReportingNew.Controllers
                 //if(rep!=null && (rep.ReportName==null || rep.ReportName=="" ))
                 //    repName = rep.ReportName;
 
-                Session["reportname"] = balls.First();
+                string reportName = balls.First();
 
                 var log = new WebLog()
                 {
                     TimeStamp = DateTime.Now,
                     Level = "fatal",
                     UserMessage = "Fatal in LoadForm2",
-                    ExceptionMessage = Session["reportname"].ToString()
+                    ExceptionMessage = reportName
                 };
                 AddToLog(log);
 
-                return RedirectToAction("Index", "Home", new { userguid = userID, sessionGuid = sessionID, reportId = reportId, dbxUrl = url });
+                return RedirectToAction("Index", "Home", new { userguid = userID, sessionGuid = sessionID, reportId = repid, dbxUrl = dbxUrl, reportName = reportName });
             }
             catch (Exception e)
             {
@@ -172,12 +161,11 @@ namespace ReportingNew.Controllers
             try
             {
 
-                var userGuid = Guid.Parse(Session["userID"].ToString());
-                int repID = Convert.ToInt32(Session["RepID"]);
+                var userGuid = model.UserID;
 
                 model.sitesRep = context.P_Mob_Get_SitesForAUser(userGuid);
 
-                var paramenterRecords = context.P_Mob_Get_ReportControls(repID);
+                var paramenterRecords = context.P_Mob_Get_ReportControls(model.ReportId);
                 model.reportControls = paramenterRecords;
                 return PartialView("_Form", model);
             }
@@ -205,7 +193,6 @@ namespace ReportingNew.Controllers
         {
             try
             {
-                SPMenuModel model = new SPMenuModel();
                 var keys = Request.Form.AllKeys;
                 Dictionary<string, string> ParmsAndValues = new Dictionary<string, string>();
                 var reprec = GetReportRec(repid);
@@ -256,7 +243,7 @@ namespace ReportingNew.Controllers
                     var dbxUrlCoded = HttpUtility.UrlEncode(dbxUrl);
 
                     var authenticatedUrl = urlFromSP + "&sessionGuid=" + sessionGuid + "&dbx=" + dbxUrlCoded;
-                    Session["RepID"] = null;
+
                     List<string> keyss = new List<string>();
 
                     var staleItem = Url.Action("urlJT", "Home", new
@@ -269,35 +256,25 @@ namespace ReportingNew.Controllers
 
                     //  Remove the item from cache  
                     Response.RemoveOutputCacheItem(staleItem);
-                    Session["reportname"] = null;
-                    Session["userID"] = null;
-                    Session["dbxurl"] = null;
-                    Session["RepID"] = null;
-                    Session["sessionGuid"] = null;
-                    Session["paramdic"] = null;
-                    Session["ShowPaginatedReport"] = null;
                     return Redirect(authenticatedUrl.ToString());
                 }
                 else if (reprec.Format == "2")
                 {
-                    t = true;
-                    Session["ShowPaginatedReport"] = t;
-                    var family = new FamilyResultResponse();
-                    family.ShowReports = true;
-                    df = dateFrom;
-                    dt = dateTo;
-                    ug = userGuid;
-                    bi = brand.ToString();
-                    si = siteID.ToString();
-                    Session["reportname"] = reprec.ReportName;
-                    dic.Add("datefrom", dateFrom);
-                    dic.Add("dateto", dateTo);
-                    dic.Add("userguid", userGuid);
-                    dic.Add("brandid", brand.ToString());
-                    dic.Add("siteid", siteID.ToString());
-                    Session["paramdic"] = dic;
+                    //var family = new FamilyResultResponse();
+                    //family.ShowReports = true;
+                    //df = dateFrom;
+                    //dt = dateTo;
+                    //ug = userGuid;
+                    //bi = brand.ToString();
+                    //si = siteID.ToString();
+                    //dic.Add("datefrom", dateFrom);
+                    //dic.Add("dateto", dateTo);
+                    //dic.Add("userguid", userGuid);
+                    //dic.Add("brandid", brand.ToString());
+                    //dic.Add("siteid", siteID.ToString());
+                    //Session["paramdic"] = dic;
 
-                    return RedirectToAction("Index", "Home", new { userguid = userID, sessionGuid = sessionGuid, reportId = repid, showrep = t });
+                    return RedirectToAction("Index", "Home", new { userguid = userID, sessionGuid = sessionGuid, reportId = repid, showrep = true, reportName = reprec.ReportName, brandid = brand.ToString(), datefrom = dateFrom, dateto = dateTo, siteid = siteID });
 
                 }
                 return RedirectToAction("Index", "Home", new { userguid = userID, sessionGuid = sessionGuid, reportId = repid, showrep = t });
@@ -317,8 +294,9 @@ namespace ReportingNew.Controllers
             }
 
         }
-        //[Route("Home/ReportTemplateLoader/{reportName}")]
-        public ActionResult ReportTemplateLoader()
+
+        [Route("Home/ReportTemplateLoader/{reportName}")]
+        public ActionResult ReportTemplateLoader(string reportName, string userguid, string brandid, string siteid, string datefrom, string dateto)
         {
             //    var reprec = GetReportRec(repid);
             try
@@ -326,7 +304,6 @@ namespace ReportingNew.Controllers
 
 
                 var height = 500;
-                var reportName = Session["reportname"].ToString();
                 if (reportName == null)
                 {
                     reportName = "Luke Done Broke it";
@@ -339,7 +316,7 @@ namespace ReportingNew.Controllers
                     Height = 600,
                     ReportName = reportName,
                     ReportDescription = reportName,
-                    ReportURL = String.Format("../../../Reports/ReportTemplate.aspx?ReportName={0}&Height={1}", reportName, height)
+                    ReportURL = String.Format("../../../Reports/ReportTemplate.aspx?ReportName={0}&Height={1}&userguid={2}&brandid={3}&siteid={4}&datefrom={5}&dateto={6}", reportName, height, userguid, brandid, siteid, datefrom, dateto)
 
                 };
                 return PartialView("ReportTemplate", rptInfo);

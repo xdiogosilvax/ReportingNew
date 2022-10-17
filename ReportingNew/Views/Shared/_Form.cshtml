@@ -5,11 +5,11 @@
         @model SPMenuModel
 
        
-            <form action="/Home/urlJT/@Session["userID"]/@Session["sessionGuid"]/@Session["RepID"]/@HttpUtility.UrlEncode(Session["dbxUrl"].ToString())" method="post">
+            <form action="/Home/urlJT/@Model.UserID/@Model.SessionGuid/@Model.ReportId/@HttpUtility.UrlEncode(Model.DbxUrl)" method="post">
 
                     
 
-                <h2>@Session["reportname"]</h2>
+                <h2>@Model.ReportName</h2>
                 <br />
 
                 <div class="form-group">

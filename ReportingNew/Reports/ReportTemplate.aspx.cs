@@ -15,7 +15,15 @@ namespace ReportingNew.Reports
     {
         public Dictionary<string, string> GetParameterList() 
         {
-             return (Dictionary<string, string>)Session["paramdic"];
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+
+            dic.Add("datefrom", Request.Params["datefrom"]);
+            dic.Add("dateto", Request.Params["dateto"]);
+            dic.Add("userguid", Request.Params["userguid"]);
+            dic.Add("brandid", Request.Params["brandid"]);
+            dic.Add("siteid", Request.Params["siteid"]);
+
+            return dic;
 
         }
 
@@ -61,13 +69,6 @@ namespace ReportingNew.Reports
                     Console.WriteLine(ex.ToString());
                 }
             }
-            Session["reportname"] = null;
-            Session["userID"] = null;
-            Session["dbxurl"] = null;
-            Session["RepID"] = null;
-            Session["sessionGuid"] = null;
-            Session["paramdic"] = null;
-            Session["ShowPaginatedReport"] = null;
         }
     }
     

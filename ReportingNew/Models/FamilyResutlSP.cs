@@ -10,7 +10,16 @@ namespace ReportingNew.Models
         public List<Family> Families { get; set; }
         public List<Sites> SitesGet { get; set; }
         public bool ShowReports { get; set; }
-
+        public bool ShowPaginatedReport { get; set; }
+        public string ReportName { get; set; }
+        public int? ReportId { get; set; }
+        public string DbxUrl { get; set; }
+        public Guid? SessionGuid { get; set; }
+        public Guid? UserID { get; set; }
+        public string DateFrom { get; set; }
+        public string DateTo { get; set; }
+        public string BrandId { get; set; }
+        public string SiteId { get; set; }
     }
 
     public class Family
