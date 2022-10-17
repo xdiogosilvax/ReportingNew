@@ -103,7 +103,7 @@ namespace ReportingNew.Controllers
 
 
 
-        [Route("Home/getReport/{userguid}/{sessionGuid}/{repid}/{dbxUrl}")]
+        //[Route("Home/getReport/{userguid}/{sessionGuid}/{repid}/{dbxUrl}")]
         public ActionResult getReport(Guid? userGuid, Guid? sessionGuid, int? repid, string dbxUrl)
         {
             try
