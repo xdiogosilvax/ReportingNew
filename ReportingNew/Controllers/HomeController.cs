@@ -274,10 +274,10 @@ namespace ReportingNew.Controllers
                     //dic.Add("siteid", siteID.ToString());
                     //Session["paramdic"] = dic;
 
-                    return RedirectToAction("Index", "Home", new { userguid = userID, sessionGuid = sessionGuid, reportId = repid, showrep = true, reportName = reprec.ReportName, brandid = brand.ToString(), datefrom = dateFrom, dateto = dateTo, siteid = siteID });
+                    return RedirectToAction("Index", "Home", new { dbxUrl = dbxUrl, userguid = userID, sessionGuid = sessionGuid, reportId = repid, showrep = true, reportName = reprec.ReportName, brandid = brand.ToString(), datefrom = dateFrom, dateto = dateTo, siteid = siteID });
 
                 }
-                return RedirectToAction("Index", "Home", new { userguid = userID, sessionGuid = sessionGuid, reportId = repid, showrep = t });
+                return RedirectToAction("Index", "Home", new { dbxUrl = dbxUrl, userguid = userID, sessionGuid = sessionGuid, reportId = repid, showrep = t });
             }
             catch (Exception e)
             {
@@ -316,7 +316,7 @@ namespace ReportingNew.Controllers
                     Height = 600,
                     ReportName = reportName,
                     ReportDescription = reportName,
-                    ReportURL = String.Format("../../../Reports/ReportTemplate.aspx?ReportName={0}&Height={1}&userguid={2}&brandid={3}&siteid={4}&datefrom={5}&dateto={6}", reportName, height, userguid, brandid, siteid, datefrom, dateto)
+                    ReportURL = String.Format("../../../../../Reports/ReportTemplate.aspx?ReportName={0}&Height={1}&userguid={2}&brandid={3}&siteid={4}&datefrom={5}&dateto={6}", reportName, height, userguid, brandid, siteid, datefrom, dateto)
 
                 };
                 return PartialView("ReportTemplate", rptInfo);
